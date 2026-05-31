@@ -1,0 +1,20 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-refresh",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/history-snapshot",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/alert-scan",
+      "schedule": "0 8,20 * * *"
+    },
+    {
+      "path": "/api/cron/digest-send",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}
