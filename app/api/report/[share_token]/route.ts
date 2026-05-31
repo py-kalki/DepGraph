@@ -11,14 +11,14 @@ import { CacheKeys } from '@/lib/cache/keys';
 import type { DbScanReport } from '@/lib/types';
 
 interface RouteParams {
-  params: { share_token: string };
+  params: Promise<{ share_token: string }>;
 }
 
 export async function GET(
   _request: NextRequest,
   { params }: RouteParams
 ): Promise<NextResponse> {
-  const { share_token } = params;
+  const { share_token } = await params;
 
   // Basic validation — share tokens are 20 alphanumeric chars
   if (!share_token || !/^[a-zA-Z0-9_-]{10,30}$/.test(share_token)) {

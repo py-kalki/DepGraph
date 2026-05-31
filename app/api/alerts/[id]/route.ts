@@ -10,8 +10,9 @@ import { updateAlertSubscription, deleteAlertSubscription } from '@/lib/db/queri
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -25,7 +26,7 @@ export async function PATCH(
   };
 
   const updated = await updateAlertSubscription(
-    params.id,
+    id,
     session.userId,
     {
       ...(threshold   !== undefined && { threshold }),
@@ -43,12 +44,13 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const ok = await deleteAlertSubscription(params.id, session.userId);
+  const ok = await deleteAlertSubscription(id, session.userId);
   if (!ok) return NextResponse.json({ error: 'Alert not found or access denied' }, { status: 404 });
 
   return NextResponse.json({ deleted: true });

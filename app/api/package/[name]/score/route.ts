@@ -17,7 +17,7 @@ import { insertScoreHistory } from '@/lib/db/queries/history';
 import type { PackageScore, PackageScoreResponse, RawSignals } from '@/lib/types';
 
 interface RouteParams {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }
 
 export async function GET(
@@ -25,7 +25,8 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse> {
   // Decode URL-encoded package names (e.g. @types%2Fnode → @types/node)
-  const packageName = decodeURIComponent(params.name);
+  const { name } = await params;
+  const packageName = decodeURIComponent(name);
 
   if (!packageName || packageName.length > 255) {
     return NextResponse.json(
