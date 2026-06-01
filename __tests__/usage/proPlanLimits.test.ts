@@ -22,7 +22,7 @@ describe('assertProjectLimit — pro plan', () => {
 
 describe('assertProjectLimit — team plan', () => {
   test('does not throw for 100 projects', () => {
-    expect(() => assertProjectLimit('team', 100)).not.toThrow();
+    expect(() => assertProjectLimit('pro', 100)).not.toThrow();
   });
 });
 
@@ -48,7 +48,7 @@ describe('assertProFeature — pro plan', () => {
 
 describe('assertProFeature — team plan', () => {
   test('does not throw for onDemandRefresh', () => {
-    expect(() => assertProFeature('team', 'onDemandRefresh')).not.toThrow();
+    expect(() => assertProFeature('pro', 'onDemandRefresh')).not.toThrow();
   });
 });
 

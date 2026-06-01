@@ -142,7 +142,7 @@ async function handleSubscriptionActivated(payload: RazorpayWebhookPayload): Pro
   const planId        = sub.plan_id as string;
 
   // Determine plan tier from plan ID
-  const plan = planId.includes('team') ? 'team' : 'pro';
+  const plan = 'pro';
 
   // Find our subscription record
   const db = getDbClient();
@@ -305,7 +305,7 @@ async function handleSubscriptionResumed(payload: RazorpayWebhookPayload): Promi
     currentEnd:   sub.current_end   ? new Date((sub.current_end as number) * 1000).toISOString()   : null,
   });
 
-  const plan = (subRow.plan as 'pro' | 'team') ?? 'pro';
+  const plan = (subRow.plan as 'pro') ?? 'pro';
   await updateUserPlan(subRow.user_id as string, plan);
   await updateUserSubscriptionStatus(subRow.user_id as string, 'active');
 }

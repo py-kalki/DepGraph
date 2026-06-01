@@ -55,7 +55,7 @@ describe('assertActionPlan', () => {
   });
 
   it('returns null for team plan', () => {
-    expect(assertActionPlan('team')).toBeNull();
+    expect(assertActionPlan('pro')).toBeNull();
   });
 
   it('returns 403 NextResponse for free plan', () => {

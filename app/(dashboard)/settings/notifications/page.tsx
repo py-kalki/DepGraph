@@ -24,7 +24,7 @@ export default async function NotificationsPage() {
     getOrCreateEmailPreferences(userId),
   ]);
 
-  const isPro = user?.plan === 'pro' || user?.plan === 'team';
+  const isPro = user?.plan === 'pro';
 
   return (
     <div className="dashboard-shell-content">

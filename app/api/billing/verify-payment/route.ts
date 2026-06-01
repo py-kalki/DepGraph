@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         .eq('user_id', session.userId)
         .single();
 
-      const plan = (subRow?.plan as 'pro' | 'team') ?? 'pro';
+      const plan = (subRow?.plan as 'pro') ?? 'pro';
 
       // Optimistically activate plan (webhook will confirm)
       await updateSubscriptionStatus(razorpaySubscriptionId, 'authenticated', {});

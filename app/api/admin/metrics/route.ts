@@ -36,7 +36,7 @@ export async function GET() {
   ] = await Promise.all([
     db.from('users').select('*', { count: 'exact', head: true }).eq('plan', 'free'),
     db.from('users').select('*', { count: 'exact', head: true }).eq('plan', 'pro'),
-    db.from('users').select('*', { count: 'exact', head: true }).eq('plan', 'team'),
+    Promise.resolve({ count: 0 }), // team users removed
     db.from('projects').select('*', { count: 'exact', head: true }),
     db.from('beta_users').select('*', { count: 'exact', head: true }),
   ]);

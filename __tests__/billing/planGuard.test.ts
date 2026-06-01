@@ -19,7 +19,7 @@ describe('assertPrivateRepoAccess', () => {
   });
 
   it('allows team plan', () => {
-    expect(() => assertPrivateRepoAccess('team')).not.toThrow();
+    expect(() => assertPrivateRepoAccess('pro')).not.toThrow();
   });
 });
 
@@ -36,7 +36,7 @@ describe('assertAlertAccess', () => {
     });
 
     it(`allows team plan + ${alertType}`, () => {
-      expect(() => assertAlertAccess('team', alertType)).not.toThrow();
+      expect(() => assertAlertAccess('pro', alertType)).not.toThrow();
     });
   });
 

@@ -8,7 +8,7 @@
 
 export type RiskLevel = 'critical' | 'high' | 'medium' | 'low' | 'healthy';
 export type Ecosystem = 'npm'; // V2: 'pypi' | 'crates' | 'go'
-export type PlanTier = 'free' | 'pro' | 'team';
+export type PlanTier = 'free' | 'pro';
 export type AlertType = 'score_drop' | 'new_cve' | 'abandonment_risk' | 'digest';
 export type AlertChannel = 'email' | 'webhook';
 export type MigrationEffort = 'easy' | 'medium' | 'hard';
@@ -341,7 +341,7 @@ export interface DbSubscription {
   user_id: string;
   razorpay_subscription_id: string;
   razorpay_plan_id: string;
-  plan: 'pro' | 'team';
+  plan: 'pro';
   status: RazorpaySubStatus;
   current_start: string | null;
   current_end: string | null;
@@ -385,7 +385,6 @@ export interface PlanLimits {
 export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
   free: { maxProjects: 3, historyDays: 30, canUsePrivateRepos: false, canOnDemandRefresh: false },
   pro:  { maxProjects: null, historyDays: 365, canUsePrivateRepos: true, canOnDemandRefresh: true },
-  team: { maxProjects: null, historyDays: 365, canUsePrivateRepos: true, canOnDemandRefresh: true },
 };
 
 // ─── Week 5: Alert / Email / Repo DB Row Shapes ───────────────────────────────

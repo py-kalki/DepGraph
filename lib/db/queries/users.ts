@@ -68,7 +68,7 @@ export async function getUserById(id: string): Promise<DbUser | null> {
  */
 export async function updateUserPlan(
   userId: string,
-  plan: 'free' | 'pro' | 'team',
+  plan: 'free' | 'pro',
 ): Promise<void> {
   const db = getDbClient();
   const { error } = await db

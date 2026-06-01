@@ -59,7 +59,7 @@ export async function createSubscriptionRecord(params: {
   userId: string;
   razorpaySubscriptionId: string;
   razorpayPlanId: string;
-  plan: 'pro' | 'team';
+  plan: 'pro';
 }): Promise<DbSubscription> {
   const db = getDbClient();
 

@@ -23,7 +23,7 @@ export default async function BillingPage() {
     getInvoicesByUserId(userId),
   ]);
 
-  const plan = (user?.plan ?? 'free') as 'free' | 'pro' | 'team';
+  const plan = (user?.plan ?? 'free') === 'pro' ? 'pro' : 'free';
 
   return (
     <div className="dashboard-shell-content">
