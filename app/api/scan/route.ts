@@ -1,3 +1,4 @@
+export const maxDuration = 60;
 // =============================================================================
 // POST /api/scan
 // Authenticated endpoint — accepts API key or session cookie (PRD §13).
@@ -72,9 +73,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // 2. Score all packages in parallel (Promise.allSettled — failures don't kill the scan)
-    const packageResults = await Promise.allSettled(
-      packages.map((pkg) => scorePackage(pkg))
-    );
+    // Process in chunks to avoid rate limiting and concurrency bombs
+    const CHUNK_SIZE = 50;
+    const packageResults: PromiseSettledResult<PackageScore>[] = [];
+    for (let i = 0; i < packages.length; i += CHUNK_SIZE) {
+      const chunk = packages.slice(i, i + CHUNK_SIZE);
+      const chunkResults = await Promise.allSettled(chunk.map((pkg) => scorePackage(pkg)));
+      packageResults.push(...chunkResults);
+    }
 
     const packageScores: PackageScore[] = packageResults
       .filter((r): r is PromiseFulfilledResult<PackageScore> => r.status === 'fulfilled')
