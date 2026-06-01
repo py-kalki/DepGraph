@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const plan = body.plan === 'team' ? 'team' : 'pro';
+  const plan = 'pro';
   const planId = getRazorpayPlanId(plan);
 
   try {

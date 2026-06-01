@@ -23,6 +23,6 @@ export function getRazorpayPlanId(plan: 'pro' | 'team'): string {
 
 /** Plan amounts in paise (1 INR = 100 paise) */
 export const PLAN_AMOUNTS_PAISE: Record<'pro' | 'team', number> = {
-  pro:  1900_00,  // ₹1,900/month (~$19 USD equivalent in INR)
-  team: 7900_00,  // ₹7,900/month (~$79 USD equivalent in INR)
+  pro:  99_00,  // ₹99/month
+  team: 7900_00,  // deprecated
 };

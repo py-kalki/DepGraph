@@ -22,7 +22,7 @@ export default function ApiKeyManager({ initialKeys, plan }: ApiKeyManagerProps)
   const [creating, setCreating] = useState(false);
   const [error, setError]       = useState<string | null>(null);
 
-  const isPro = plan === 'pro' || plan === 'team';
+  const isPro = plan === 'pro';
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -67,7 +67,7 @@ export default function ApiKeyManager({ initialKeys, plan }: ApiKeyManagerProps)
       {!isPro && (
         <div className="api-key-upgrade-banner">
           <span>🔒</span>
-          <span>API keys require a <strong>Pro or Team</strong> plan. </span>
+          <span>API keys require a <strong>Pro</strong> plan. </span>
           <a href="/pricing">Upgrade</a>
         </div>
       )}

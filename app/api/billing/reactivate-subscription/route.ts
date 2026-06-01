@@ -47,11 +47,9 @@ export async function POST(): Promise<NextResponse> {
     await markSubscriptionCancelled(userId, existingSub.razorpay_subscription_id);
   }
 
-  // Determine plan from last subscription (default pro)
-  const plan   = existingSub?.plan ?? 'pro';
-  const planId = plan === 'team'
-    ? env.RAZORPAY_PLAN_ID_TEAM
-    : env.RAZORPAY_PLAN_ID_PRO;
+  // Determine plan (default pro)
+  const plan   = 'pro';
+  const planId = env.RAZORPAY_PLAN_ID_PRO;
 
   // Create fresh subscription
   const newSub = await reactivateRazorpaySubscription(

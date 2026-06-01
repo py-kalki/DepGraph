@@ -2,7 +2,7 @@ import type { DbSubscription } from '@/lib/types';
 
 interface SubscriptionStatusProps {
   subscription: DbSubscription | null;
-  plan:         'free' | 'pro' | 'team';
+  plan:         'free' | 'pro';
 }
 
 const STATUS_LABELS: Record<string, string> = {

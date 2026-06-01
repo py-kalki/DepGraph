@@ -8,7 +8,7 @@ import CancelModal from './CancelModal';
 import type { DbSubscription, DbInvoice } from '@/lib/types';
 
 interface BillingDashboardProps {
-  plan:         'free' | 'pro' | 'team';
+  plan:         'free' | 'pro';
   subscription: DbSubscription | null;
   invoices:     DbInvoice[];
 }

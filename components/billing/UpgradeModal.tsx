@@ -10,7 +10,7 @@ interface UpgradeModalProps {
 export default function UpgradeModal({ currentPlan, onClose }: UpgradeModalProps) {
   const [loading, setLoading] = useState<string | null>(null);
 
-  const handleUpgrade = async (plan: 'pro' | 'team') => {
+  const handleUpgrade = async (plan: 'pro') => {
     setLoading(plan);
     try {
       const res  = await fetch('/api/billing/create-subscription', {
@@ -44,16 +44,7 @@ export default function UpgradeModal({ currentPlan, onClose }: UpgradeModalProps
             disabled={loading !== null || currentPlan === 'pro'}
             aria-busy={loading === 'pro'}
           >
-            {loading === 'pro' ? 'Redirecting…' : 'Upgrade to Pro — ₹1,599/month'}
-          </button>
-          <button
-            id="upgrade-to-team"
-            className="btn btn-secondary upgrade-option"
-            onClick={() => handleUpgrade('team')}
-            disabled={loading !== null || currentPlan === 'team'}
-            aria-busy={loading === 'team'}
-          >
-            {loading === 'team' ? 'Redirecting…' : 'Upgrade to Team — ₹6,599/month'}
+            {loading === 'pro' ? 'Redirecting…' : 'Upgrade to Pro — ₹99/month'}
           </button>
         </div>
 
