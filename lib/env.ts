@@ -34,7 +34,6 @@ export interface Env {
 
   // Razorpay Plan IDs (Week 5)
   RAZORPAY_PLAN_ID_PRO: string;
-  RAZORPAY_PLAN_ID_TEAM: string;
 
   // Resend (Week 5 — email alerts)
   RESEND_API_KEY: string;
@@ -72,7 +71,6 @@ const DEFAULTS: Partial<Env> = {
   RAZORPAY_KEY_SECRET: 'placeholder_secret',
   RAZORPAY_WEBHOOK_SECRET: 'placeholder_webhook_secret',
   RAZORPAY_PLAN_ID_PRO: 'plan_pro_placeholder',
-  RAZORPAY_PLAN_ID_TEAM: 'plan_team_placeholder',
   RESEND_API_KEY: 're_placeholder',
   CRON_SECRET: 'dev_cron_secret',
   // NextAuth placeholders for local dev
@@ -116,7 +114,6 @@ function validateEnv(): Env {
     RAZORPAY_KEY_SECRET:         process.env.RAZORPAY_KEY_SECRET   ?? DEFAULTS.RAZORPAY_KEY_SECRET!,
     RAZORPAY_WEBHOOK_SECRET:     process.env.RAZORPAY_WEBHOOK_SECRET ?? DEFAULTS.RAZORPAY_WEBHOOK_SECRET!,
     RAZORPAY_PLAN_ID_PRO:        process.env.RAZORPAY_PLAN_ID_PRO  ?? DEFAULTS.RAZORPAY_PLAN_ID_PRO!,
-    RAZORPAY_PLAN_ID_TEAM:       process.env.RAZORPAY_PLAN_ID_TEAM ?? DEFAULTS.RAZORPAY_PLAN_ID_TEAM!,
     // Resend
     RESEND_API_KEY:              process.env.RESEND_API_KEY         ?? DEFAULTS.RESEND_API_KEY!,
     // Cron
