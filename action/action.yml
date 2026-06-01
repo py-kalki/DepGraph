@@ -1,0 +1,38 @@
+name: 'DepGraph Dependency Health Check'
+description: 'Scan your dependencies on every PR and enforce health thresholds. Powered by depgraph.vedanshh.dev'
+author: 'DepGraph'
+
+branding:
+  icon: 'shield'
+  color: 'purple'
+
+inputs:
+  api-key:
+    description: 'DepGraph API key (store as a repository secret: DEPGRAPH_API_KEY)'
+    required: true
+  fail-on:
+    description: 'Fail the build when this risk level is detected. Options: none | critical | high | medium'
+    required: false
+    default: 'critical'
+  post-comment:
+    description: 'Post or update a PR comment with the health report'
+    required: false
+    default: 'true'
+  api-url:
+    description: 'DepGraph API base URL (advanced: override for self-hosted)'
+    required: false
+    default: 'https://depgraph.vedanshh.dev'
+
+outputs:
+  overall-score:
+    description: 'Overall dependency health score (0–100)'
+  critical-count:
+    description: 'Number of critical-risk dependencies added in this PR'
+  high-count:
+    description: 'Number of high-risk dependencies added in this PR'
+  report-url:
+    description: 'URL to the full DepGraph report for this PR'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

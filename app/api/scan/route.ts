@@ -19,6 +19,7 @@ import { CacheKeys } from '@/lib/cache/keys';
 import { upsertPackageScore } from '@/lib/db/queries/packages';
 import { insertScoreHistory } from '@/lib/db/queries/history';
 import { createScanReport } from '@/lib/db/queries/scans';
+import { trackFirstScan } from '@/lib/analytics/events';
 import type { ScanRequest, ScanReport, PackageScore, RawSignals } from '@/lib/types';
 import { getEnv } from '@/lib/env';
 
@@ -97,6 +98,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       projectId: null, // Week 4: link to saved project
     });
 
+    // Track analytics (use apiKey or lockfileHash as distinctId if unauthenticated)
+    const distinctId = apiKey ?? lockfileHash ?? 'anonymous';
+    trackFirstScan(distinctId, {
+      packageCount: packageScores.length,
+      overallScore,
+    });
+
     const report: ScanReport = {
       id,
       shareToken,
@@ -117,7 +125,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       cacheSet(CacheKeys.scanReport(lockfileHash), report, TTL.SCAN_REPORT).catch(() => {});
     }
 
-    // Share URL format per PRD: depgraph.dev/r/{shareToken}
+    // Share URL format per PRD: depgraph.vedanshh.dev/r/{shareToken}
     return NextResponse.json({
       ...report,
       shareUrl: `${env.NEXT_PUBLIC_APP_URL}/r/${shareToken}`,

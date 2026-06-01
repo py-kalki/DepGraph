@@ -15,5 +15,5 @@ export function getResend(): Resend {
   return _client;
 }
 
-export const FROM_ADDRESS  = 'alerts@depgraph.dev';
-export const REPLY_TO      = 'support@depgraph.dev';
+export const FROM_ADDRESS  = 'alerts@depgraph.vedanshh.dev';
+export const REPLY_TO      = 'vedanshh.dev@gmail.com';

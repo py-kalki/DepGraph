@@ -17,7 +17,7 @@ const LINES = [
   { delay: 3800, text: '', type: 'blank' },
   { delay: 4000, text: '  HIGH (7)   MEDIUM (18)   LOW (41)   HEALTHY (179)', type: 'summary' },
   { delay: 4400, text: '', type: 'blank' },
-  { delay: 4600, text: '  Full report: https://depgraph.dev/r/a3f9x2k1', type: 'link' },
+  { delay: 4600, text: '  Full report: https://depgraph.vedanshh.dev/r/a3f9x2k1', type: 'link' },
 ];
 
 const TYPE_COLORS: Record<string, string> = {

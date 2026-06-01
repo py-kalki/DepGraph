@@ -33,7 +33,7 @@ export function ReportCard({ report }: Props) {
   const lowCount    = report.dep_scores.filter((d) => d.risk_level === 'low').length;
   const healthyCount = report.dep_scores.filter((d) => d.risk_level === 'healthy').length;
 
-  const shareUrl = `https://depgraph.dev/r/${report.share_token}`;
+  const shareUrl = `https://depgraph.vedanshh.dev/r/${report.share_token}`;
   const createdAt = new Date(report.created_at).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
   });

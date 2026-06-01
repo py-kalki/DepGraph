@@ -1,0 +1,37 @@
+# .github/workflows/depgraph.yml
+# Advanced usage — capture outputs, custom threshold, conditional steps
+name: Dependency Health Check
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  depgraph:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write   # required to post PR comments
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: DepGraph Dependency Health Check
+        uses: depgraph/action@v1
+        id: depgraph
+        with:
+          api-key: ${{ secrets.DEPGRAPH_API_KEY }}
+          fail-on: high           # fail on high or critical
+          post-comment: true
+
+      - name: Print results
+        if: always()
+        run: |
+          echo "Overall score: ${{ steps.depgraph.outputs.overall-score }}"
+          echo "Critical deps: ${{ steps.depgraph.outputs.critical-count }}"
+          echo "High deps:     ${{ steps.depgraph.outputs.high-count }}"
+          echo "Full report:   ${{ steps.depgraph.outputs.report-url }}"

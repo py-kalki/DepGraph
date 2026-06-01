@@ -7,12 +7,15 @@ import { authOptions } from '@/lib/auth/config';
 
 jest.mock('@/lib/db/queries/users', () => ({
   upsertUser: jest.fn().mockResolvedValue({
-    id: 'uuid-1',
-    github_id: 42,
-    github_login: 'testuser',
-    email: 'test@example.com',
-    plan: 'free',
-    created_at: new Date().toISOString(),
+    user: {
+      id: 'uuid-1',
+      github_id: 42,
+      github_login: 'testuser',
+      email: 'test@example.com',
+      plan: 'free',
+      created_at: new Date().toISOString(),
+    },
+    isNew: false,
   }),
 }));
 

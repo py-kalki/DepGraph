@@ -194,7 +194,7 @@ export interface PackageScore {
  */
 export interface ScanReport {
   id: string;
-  /** Short token for the public share URL: depgraph.dev/r/{shareToken} */
+  /** Short token for the public share URL: depgraph.vedanshh.dev/r/{shareToken} */
   shareToken: string;
   /** Weighted average of all package scores */
   overallScore: number;

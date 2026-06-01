@@ -13,7 +13,7 @@ const scoreDropPayload = {
   previousScore: 72,
   currentScore:  51,
   delta:         -21,
-  shareUrl:      'https://depgraph.dev/report/abc',
+  shareUrl:      'https://depgraph.vedanshh.dev/report/abc',
 };
 
 describe('scoreDrop template', () => {
@@ -32,7 +32,7 @@ describe('scoreDrop template', () => {
 
   it('HTML includes share URL', () => {
     const html = scoreDropHtml(scoreDropPayload);
-    expect(html).toContain('https://depgraph.dev/report/abc');
+    expect(html).toContain('https://depgraph.vedanshh.dev/report/abc');
   });
 
   it('text includes project name and delta', () => {
@@ -50,7 +50,7 @@ describe('newCve template', () => {
     cveId:       'CVE-2023-99999',
     severity:    'CRITICAL' as const,
     description: 'Remote code execution',
-    shareUrl:    'https://depgraph.dev/report/xyz',
+    shareUrl:    'https://depgraph.vedanshh.dev/report/xyz',
   };
 
   it('subject includes severity and package name', () => {

@@ -16,6 +16,7 @@ export interface Env {
   // Upstash Redis
   UPSTASH_REDIS_REST_URL: string;
   UPSTASH_REDIS_REST_TOKEN: string;
+  ADMIN_EMAILS?: string;
 
   // GitHub
   GITHUB_TOKEN: string;
@@ -101,6 +102,7 @@ function validateEnv(): Env {
     SUPABASE_SERVICE_ROLE_KEY:   process.env.SUPABASE_SERVICE_ROLE_KEY!,
     UPSTASH_REDIS_REST_URL:      process.env.UPSTASH_REDIS_REST_URL!,
     UPSTASH_REDIS_REST_TOKEN:    process.env.UPSTASH_REDIS_REST_TOKEN!,
+    ADMIN_EMAILS:                process.env.ADMIN_EMAILS,
     GITHUB_TOKEN:                process.env.GITHUB_TOKEN!,
     NEXT_PUBLIC_APP_URL:         process.env.NEXT_PUBLIC_APP_URL   ?? DEFAULTS.NEXT_PUBLIC_APP_URL!,
     NODE_ENV:                   (process.env.NODE_ENV as Env['NODE_ENV']) ?? DEFAULTS.NODE_ENV!,

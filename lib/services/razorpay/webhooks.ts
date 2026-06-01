@@ -18,6 +18,7 @@ import {
   insertWebhookEvent,
 } from '@/lib/db/queries/billing';
 import { updateUserPlan, updateUserSubscriptionStatus } from '@/lib/db/queries/users';
+import { trackSubscriptionUpgraded } from '@/lib/analytics/events';
 
 export class WebhookVerificationError extends Error {
   constructor(message: string) {
@@ -162,6 +163,12 @@ async function handleSubscriptionActivated(payload: RazorpayWebhookPayload): Pro
   // Upgrade user plan
   await updateUserPlan(subRow.user_id as string, plan);
   await updateUserSubscriptionStatus(subRow.user_id as string, 'active');
+
+  trackSubscriptionUpgraded(subRow.user_id as string, {
+    plan,
+    previousPlan: 'free',
+    mrr: ((sub.plan_amount ?? 0) as number) / 100
+  });
 }
 
 async function handleSubscriptionCharged(payload: RazorpayWebhookPayload): Promise<void> {

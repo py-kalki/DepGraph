@@ -13,34 +13,38 @@ export interface UpsertUserInput {
 }
 
 /**
- * Upsert a user row by github_id.
- * On conflict (github_id), update github_login and email but preserve plan.
- * Returns the full user row (including Supabase UUID and plan).
+ * Upsert user on login.
+ * Returns the user record and a boolean indicating if it was newly created.
  */
-export async function upsertUser(input: UpsertUserInput): Promise<DbUser> {
+export async function upsertUser(data: {
+  githubId: number;
+  githubLogin: string;
+  email: string | null;
+}): Promise<{ user: { id: string; plan: string }; isNew: boolean }> {
   const db = getDbClient();
-
-  const { data, error } = await db
+  
+  // Check if user exists first to determine if new
+  const { data: existing } = await db
     .from('users')
-    .upsert(
-      {
-        github_id: input.githubId,
-        github_login: input.githubLogin,
-        email: input.email,
-      },
-      {
-        onConflict: 'github_id',
-        ignoreDuplicates: false,
-      }
-    )
-    .select('*')
+    .select('id, plan')
+    .eq('github_id', data.githubId)
     .single();
 
-  if (error || !data) {
-    throw new Error(`[DB] upsertUser failed: ${error?.message}`);
+  const { data: user, error } = await db
+    .from('users')
+    .upsert({
+      github_id:    data.githubId,
+      github_login: data.githubLogin,
+      email:        data.email,
+    }, { onConflict: 'github_id' })
+    .select('id, plan')
+    .single();
+
+  if (error || !user) {
+    throw new Error(`Failed to upsert user: ${error?.message}`);
   }
 
-  return data as DbUser;
+  return { user, isNew: !existing };
 }
 
 /**

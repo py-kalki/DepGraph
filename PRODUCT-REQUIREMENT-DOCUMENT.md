@@ -276,7 +276,7 @@ DepGraph v1.0 — Scanning 247 dependencies...
 
   HIGH (7)   MEDIUM (18)   LOW (41)   HEALTHY (179)
 
-  Full report: https://depgraph.dev/r/a3f9x2k1
+  Full report: https://depgraph.vedanshh.dev/r/a3f9x2k1
   Run `npx depgraph fix` to see migration paths.
 ```
 
@@ -421,7 +421,7 @@ Overall Score: 74/100  ↓ from 79 (this PR added 3 new dependencies)
 
 ⚠️ 1 critical dependency added. Consider replacing left-pad with native String.padStart().
 
-Full report: https://depgraph.dev/r/pr-9x2k1
+Full report: https://depgraph.vedanshh.dev/r/pr-9x2k1
 ```
 
 **Acceptance criteria:**
@@ -671,7 +671,7 @@ GET  /api/user/usage
 
 ```
 npx depgraph auth
-→ Opens browser to https://depgraph.dev/auth/cli?device_code=XXX
+→ Opens browser to https://depgraph.vedanshh.dev/auth/cli?device_code=XXX
 → User logs in with GitHub
 → API key written to ~/.depgraph/config.json
 → CLI uses this key for all subsequent requests
@@ -802,7 +802,7 @@ npx depgraph auth
 ### Phase 3: Organic growth engine (ongoing)
 
 - **Content:** Monthly "State of npm Health" report — top 100 packages health dashboard, shareable, link-baitable
-- **SEO:** Pages for every popular package's health score (`depgraph.dev/package/lodash`) — these rank for "[package name] abandoned?" queries
+- **SEO:** Pages for every popular package's health score (`depgraph.vedanshh.dev/package/lodash`) — these rank for "[package name] abandoned?" queries
 - **Community:** Weekly newsletter for subscribers: packages whose scores changed significantly this week
 - **Integrations:** Submit to GitHub Marketplace (Action), VS Code Marketplace (Extension V2)
 

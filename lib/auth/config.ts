@@ -7,6 +7,7 @@
 import type { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import { upsertUser } from '@/lib/db/queries/users';
+import { trackSignup } from '@/lib/analytics/events';
 
 declare module 'next-auth' {
   interface Session {
@@ -66,7 +67,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user: _user, account, profile }) {
       if (account && profile) {
         const githubProfile = profile as { id: number; login: string };
-        const dbUser = await upsertUser({
+        const { user: dbUser, isNew } = await upsertUser({
           githubId: githubProfile.id,
           githubLogin: githubProfile.login,
           email: _user?.email ?? null,
@@ -74,6 +75,10 @@ export const authOptions: NextAuthOptions = {
         token.userId = dbUser.id;
         token.plan = dbUser.plan;
         token.githubLogin = githubProfile.login;
+
+        if (isNew) {
+          trackSignup(dbUser.id, { plan: dbUser.plan, githubLogin: githubProfile.login });
+        }
       }
       return token;
     },

@@ -10,6 +10,7 @@ import { authOptions } from '@/lib/auth/config';
 import { getUserProjects, createProject } from '@/lib/db/queries/projects';
 import { validateGithubRepo, RepoValidationError } from '@/lib/services/github/validateRepo';
 import { assertProjectLimit, PlanLimitError } from '@/lib/middleware/planGuard';
+import { trackProjectCreated } from '@/lib/analytics/events';
 import type { PlanTier } from '@/lib/types';
 
 export async function GET() {
@@ -59,6 +60,12 @@ export async function POST(req: Request) {
     }
 
     const project = await createProject(session.userId, body.name.trim(), githubRepo);
+    
+    trackProjectCreated(session.userId, { 
+      githubRepo,
+      plan: session.plan ?? 'free'
+    });
+    
     return NextResponse.json({ project }, { status: 201 });
 
   } catch (err) {

@@ -71,7 +71,7 @@ export default function PricingCard({
 
       <button
         id={`cta-plan-${plan}`}
-        className={`btn ${highlighted ? 'btn-primary' : 'btn-secondary'} pricing-cta`}
+        className={`btn ${highlighted ? 'btn-premium' : 'btn-secondary'} pricing-cta`}
         onClick={handleCta}
         disabled={loading}
         aria-busy={loading}

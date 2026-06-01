@@ -1,0 +1,19 @@
+# .github/workflows/depgraph.yml
+# Minimal usage — fail on critical dependencies only
+name: Dependency Health Check
+
+on: [pull_request]
+
+jobs:
+  depgraph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: depgraph/action@v1
+        with:
+          api-key: ${{ secrets.DEPGRAPH_API_KEY }}
+          fail-on: critical
+          post-comment: true

@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { PostHogProvider } from '@/components/analytics/PostHogProvider';
 import './globals.css';
 import { SessionProvider } from '@/components/auth/SessionProvider';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'DepGraph — Dependency Intelligence',
@@ -14,9 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <SessionProvider>{children}</SessionProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        <PostHogProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
