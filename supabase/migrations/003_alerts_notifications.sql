@@ -7,18 +7,20 @@
 -- PRD §12: "alert_subscriptions" table
 -- Stores per-project, per-user alert rules.
 
-CREATE TABLE IF NOT EXISTS alert_subscriptions (
-  id                   UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id              UUID        NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  project_id           UUID        NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
-  alert_type           VARCHAR(50) NOT NULL CHECK (alert_type IN ('score_drop', 'new_cve', 'abandonment_risk', 'digest')),
-  threshold            INTEGER,            -- score threshold (for score_drop type, 0–100)
-  channel              VARCHAR(20) NOT NULL DEFAULT 'email' CHECK (channel IN ('email', 'webhook')),
-  destination          VARCHAR(512) NOT NULL, -- email address or webhook URL
-  is_active            BOOLEAN     NOT NULL DEFAULT TRUE,
-  created_at           TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (user_id, project_id, alert_type, channel)
-);
+-- Modify the skeleton table created in 001_initial_schema
+
+ALTER TABLE alert_subscriptions DROP CONSTRAINT IF EXISTS alert_subscriptions_alert_type_check;
+ALTER TABLE alert_subscriptions DROP CONSTRAINT IF EXISTS alert_subscriptions_channel_check;
+
+ALTER TABLE alert_subscriptions ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
+ALTER TABLE alert_subscriptions ADD CONSTRAINT alert_subscriptions_alert_type_check 
+  CHECK (alert_type IN ('score_drop', 'new_cve', 'abandonment_risk', 'digest'));
+
+ALTER TABLE alert_subscriptions ADD CONSTRAINT alert_subscriptions_channel_check 
+  CHECK (channel IN ('email', 'webhook'));
+
+ALTER TABLE alert_subscriptions ADD CONSTRAINT alert_subscriptions_unique_idx UNIQUE (user_id, project_id, alert_type, channel);
 
 CREATE INDEX IF NOT EXISTS idx_alert_subscriptions_user_id    ON alert_subscriptions (user_id);
 CREATE INDEX IF NOT EXISTS idx_alert_subscriptions_project_id ON alert_subscriptions (project_id);
