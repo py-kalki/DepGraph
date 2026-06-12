@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import type { DbProject } from '@/lib/types';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export function ProjectSwitcher() {
   const [projects, setProjects] = useState<DbProject[]>([]);
@@ -35,8 +36,14 @@ export function ProjectSwitcher() {
 
   if (projects.length === 0) {
     return (
-      <div className="project-switcher">
-        <div className="project-switcher-btn" style={{ color: 'var(--text-muted)', cursor: 'default' }}>
+      <div style={{ position: 'relative', width: '100%', marginBottom: '1rem' }}>
+        <div style={{ 
+          color: '#666666', 
+          cursor: 'default', 
+          padding: '0.5rem 1rem', 
+          fontFamily: 'JetBrains Mono, monospace', 
+          fontSize: '0.8125rem' 
+        }}>
           No projects yet
         </div>
       </div>
@@ -44,35 +51,100 @@ export function ProjectSwitcher() {
   }
 
   return (
-    <div className="project-switcher" ref={ref}>
+    <div style={{ position: 'relative', width: '100%', marginBottom: '1rem' }} ref={ref}>
       <button
         id="project-switcher-btn"
-        className="project-switcher-btn"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
         type="button"
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.625rem 1rem',
+          background: open ? 'rgba(255,255,255,0.05)' : 'transparent',
+          border: '1px solid rgba(255,255,255,0.15)',
+          color: '#FFFFFF',
+          fontFamily: 'JetBrains Mono, monospace',
+          fontSize: '0.8125rem',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+        onMouseOut={(e) => { e.currentTarget.style.background = open ? 'rgba(255,255,255,0.05)' : 'transparent' }}
       >
-        <span className="truncate">{selected?.name ?? 'Select project'}</span>
-        <span aria-hidden="true" style={{ fontSize: '0.625rem', marginLeft: '0.25rem' }}>
-          {open ? '▲' : '▼'}
-        </span>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected?.name ?? 'Select project'}</span>
+        {open ? <ChevronUp size={14} color="#888888" /> : <ChevronDown size={14} color="#888888" />}
       </button>
 
       {open && (
-        <div className="project-switcher-dropdown" role="listbox">
+        <div 
+          role="listbox"
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: 0,
+            right: 0,
+            background: '#000000',
+            border: '1px solid rgba(255,255,255,0.15)',
+            zIndex: 300,
+            maxHeight: '200px',
+            overflowY: 'auto'
+          }}
+        >
           {projects.map((p) => (
             <button
               key={p.id}
               role="option"
               aria-selected={selected?.id === p.id}
-              className={`project-switcher-item${selected?.id === p.id ? ' active' : ''}`}
               onClick={() => { setSelected(p); setOpen(false); }}
               type="button"
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '0.625rem 1rem',
+                background: selected?.id === p.id ? 'rgba(255,255,255,0.05)' : 'transparent',
+                color: selected?.id === p.id ? '#FFFFFF' : '#888888',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.8125rem',
+                border: 'none',
+                cursor: 'pointer',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+              onMouseOut={(e) => { 
+                e.currentTarget.style.color = selected?.id === p.id ? '#FFFFFF' : '#888888'; 
+                e.currentTarget.style.background = selected?.id === p.id ? 'rgba(255,255,255,0.05)' : 'transparent';
+              }}
             >
               {p.name}
             </button>
           ))}
+          <a
+            href="/new"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              width: '100%',
+              textAlign: 'left',
+              padding: '0.625rem 1rem',
+              background: 'transparent',
+              color: '#FFFFFF',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              textDecoration: 'none',
+              borderTop: '1px solid rgba(255,255,255,0.15)',
+              cursor: 'pointer',
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'transparent' }}
+          >
+            + New Project
+          </a>
         </div>
       )}
     </div>

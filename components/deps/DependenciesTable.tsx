@@ -89,7 +89,7 @@ export function DependenciesTable({ deps, loading = false }: Props) {
   }, [deps, search, activeFilters, sortKey, sortDir]);
 
   return (
-    <div className="card" role="region" aria-label="Dependencies table">
+    <div className="card hover-card" role="region" aria-label="Dependencies table">
       <div className="card-header">
         <div className="card-title">Dependencies ({deps.length})</div>
       </div>

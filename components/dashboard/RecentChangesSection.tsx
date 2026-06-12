@@ -4,6 +4,7 @@
 // Compares two scans — shows deps that have gotten worse.
 // In Week 3 we surface deps at high/critical risk as proxies for "got worse".
 // =============================================================================
+import { CheckCircle2 } from 'lucide-react';
 
 interface DepEntry {
   name: string;
@@ -24,51 +25,66 @@ export function RecentChangesSection({ deps }: Props) {
     .slice(0, 5);
 
   return (
-    <div className="card" role="region" aria-label="Recent score changes">
-      <div className="card-title">High Risk This Scan</div>
+    <div className="card hover-card" role="region" aria-label="Recent score changes" style={{ padding: 0 }}>
+      <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
+        <div className="card-title" style={{ margin: 0 }}>High Risk This Scan</div>
+      </div>
+      
       {concerning.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--color-healthy)', fontWeight: 600 }}>
-          ✓ No high-risk dependencies
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', padding: '3rem 1rem', color: '#888888' }}>
+          <CheckCircle2 size={32} color="#1D9E75" />
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem', fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.04em', textTransform: 'uppercase' }}>No high-risk dependencies</span>
         </div>
       ) : (
-        <ul style={{ listStyle: 'none', marginTop: '0.75rem' }}>
-          {concerning.map((dep) => (
-            <li
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {concerning.map((dep, idx) => (
+            <div
               key={dep.name}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '0.5rem 0',
-                borderBottom: '1px solid var(--bg-elevated)',
+                padding: '1rem 1.5rem',
+                borderBottom: idx < concerning.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
               }}
             >
-              <span className="truncate" style={{ flex: 1, fontWeight: 500 }}>
+              <span style={{ flex: 1, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem', fontWeight: 600, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {dep.name}
                 {dep.version && (
-                  <span className="text-muted" style={{ marginLeft: '0.25rem', fontSize: '0.8125rem', fontWeight: 400 }}>
+                  <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', color: '#666666', fontWeight: 400 }}>
                     @{dep.version}
                   </span>
                 )}
               </span>
               <span
-                className={`risk-badge ${dep.risk_level}`}
-                style={{ marginLeft: '0.75rem', flexShrink: 0 }}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '0.35rem',
+                  marginLeft: '1rem', 
+                  flexShrink: 0,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.6875rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: dep.risk_level === 'critical' ? '#E24B4A' : '#EF9F27'
+                }}
                 aria-label={`Risk level: ${dep.risk_level}`}
               >
                 <span
-                  className="risk-badge-dot"
                   style={{
-                    background:
-                      dep.risk_level === 'critical' ? 'var(--color-critical)' : 'var(--color-high)',
+                    width: '6px',
+                    height: '6px',
+                    background: dep.risk_level === 'critical' ? '#E24B4A' : '#EF9F27'
                   }}
                   aria-hidden="true"
                 />
                 {dep.risk_level}
               </span>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

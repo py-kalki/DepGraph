@@ -21,6 +21,8 @@ import { ProjectSummaryMetrics }  from '@/components/dashboard/ProjectSummaryMet
 import { DependenciesTable }      from '@/components/deps/DependenciesTable';
 import { EmptyState }             from '@/components/ui/EmptyState';
 import { GaugeSkeleton }          from '@/components/ui/LoadingSkeleton';
+import HoverCardEffect            from '@/components/landing/HoverCardEffect';
+import { Package, Search }        from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Dashboard — DepGraph',
@@ -37,9 +39,11 @@ export default async function DashboardPage() {
   if (projects.length === 0) {
     return (
       <EmptyState
-        icon="📦"
+        IconComponent={Package}
         title="No projects yet"
-        description="Run 'npx depgraph check' in your project directory to get your first health report, or add a project from GitHub."
+        description="Connect a GitHub repository or create a project for CLI scanning."
+        actionLabel="Add Project"
+        actionHref="/new"
       />
     );
   }
@@ -52,7 +56,7 @@ export default async function DashboardPage() {
   if (!latestScan) {
     return (
       <EmptyState
-        icon="🔍"
+        IconComponent={Search}
         title="No scans yet"
         description={`Project "${project.name}" has no scans. Run 'npx depgraph check' to create your first report.`}
       />
@@ -71,6 +75,7 @@ export default async function DashboardPage() {
 
   return (
     <>
+      <HoverCardEffect />
       {/* Page header */}
       <div style={{ marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.25rem', fontWeight: 700 }}>{project.name}</h1>

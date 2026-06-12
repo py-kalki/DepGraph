@@ -38,59 +38,59 @@ export function ScoreGauge({ score }: Props) {
   const risk = scoreToRisk(score);
   const color = RISK_COLORS[risk];
 
-  // SVG arc — 270° sweep, starting from bottom-left
-  const R = 54;
+  // Brutalist sharp ring
+  const R = 58;
   const CX = 64;
-  const CY = 72;
-  const TOTAL_ANGLE = 270;
-  const START_ANGLE = 135; // degrees
-
-  function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
-    const rad = ((angleDeg - 90) * Math.PI) / 180;
-    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-  }
-
-  function arcPath(pct: number) {
-    const sweep = TOTAL_ANGLE * (pct / 100);
-    const endAngle = START_ANGLE + sweep;
-    const start = polarToCartesian(CX, CY, R, START_ANGLE);
-    const end = polarToCartesian(CX, CY, R, endAngle);
-    const largeArc = sweep > 180 ? 1 : 0;
-    return `M ${start.x} ${start.y} A ${R} ${R} 0 ${largeArc} 1 ${end.x} ${end.y}`;
-  }
+  const CY = 64;
+  const CIRCUMFERENCE = 2 * Math.PI * R;
+  const offset = CIRCUMFERENCE - (animated / 100) * CIRCUMFERENCE;
 
   return (
-    <div className="score-gauge-wrap" role="img" aria-label={`Health score: ${score} out of 100`}>
-      <svg width="128" height="128" viewBox="0 0 128 128" aria-hidden="true">
-        {/* Background track */}
-        <path
-          d={arcPath(100)}
-          fill="none"
-          stroke="var(--bg-elevated)"
-          strokeWidth="10"
-          strokeLinecap="round"
-        />
-        {/* Score arc */}
-        <path
-          d={arcPath(animated)}
-          fill="none"
-          stroke={color}
-          strokeWidth="10"
-          strokeLinecap="round"
-          style={{ transition: 'stroke-dasharray 0.6s ease, stroke 0.3s' }}
-        />
-      </svg>
-
-      <div className="score-gauge-number" style={{ color }}>
-        {score}
+    <div className="card hover-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2.5rem' }}>
+      <div style={{ position: 'relative', width: '128px', height: '128px' }} role="img" aria-label={`Health score: ${score} out of 100`}>
+        <svg width="128" height="128" viewBox="0 0 128 128" aria-hidden="true" style={{ transform: 'rotate(-90deg)' }}>
+          {/* Background track */}
+          <circle
+            cx={CX}
+            cy={CY}
+            r={R}
+            fill="none"
+            stroke="rgba(255,255,255,0.05)"
+            strokeWidth="4"
+          />
+          {/* Score arc */}
+          <circle
+            cx={CX}
+            cy={CY}
+            r={R}
+            fill="none"
+            stroke={color}
+            strokeWidth="4"
+            strokeDasharray={CIRCUMFERENCE}
+            strokeDashoffset={offset}
+            style={{ transition: 'stroke-dashoffset 1s ease-out, stroke 0.3s' }}
+          />
+        </svg>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="score-gauge-number" style={{ color: '#FFFFFF', fontSize: '2.5rem' }}>
+            {score}
+          </div>
+        </div>
       </div>
-      <div className="score-gauge-label">Health Score</div>
-      <div className="risk-badge" style={{ marginTop: '0.25rem' }}>
-        <span
-          className="risk-badge-dot"
-          style={{ background: color }}
-          aria-hidden="true"
-        />
+
+      <div className="score-gauge-label" style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Health Score</div>
+      <div style={{ 
+        display: 'inline-flex', 
+        alignItems: 'center', 
+        gap: '0.35rem',
+        fontFamily: 'JetBrains Mono, monospace',
+        fontSize: '0.6875rem',
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        color: color
+      }}>
+        <span style={{ width: '6px', height: '6px', background: color }} aria-hidden="true" />
         {risk}
       </div>
     </div>

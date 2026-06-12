@@ -7,6 +7,8 @@ import { ScoreBar } from '@/components/ui/ScoreBar';
 import { RiskBadge } from '@/components/ui/RiskBadge';
 import type { DepRow } from './DependenciesTable';
 
+import Link from 'next/link';
+
 function formatDownloads(n: number | null | undefined): string {
   if (n == null) return '—';
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
@@ -28,7 +30,9 @@ export function TableRow({ dep }: Props) {
     <tr>
       <td>
         <span className="mono-cell" style={{ fontWeight: 500 }}>
-          {dep.name}
+          <Link href={`/dependency/${encodeURIComponent(dep.name)}`} style={{ color: 'inherit', textDecoration: 'none' }} onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'} onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}>
+            {dep.name}
+          </Link>
           {dep.version && (
             <span className="text-muted" style={{ marginLeft: '0.25rem', fontSize: '0.75rem', fontWeight: 400 }}>
               @{dep.version}
