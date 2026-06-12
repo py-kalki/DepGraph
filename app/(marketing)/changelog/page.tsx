@@ -48,7 +48,7 @@ export default function ChangelogPage() {
             <div style={{ color: '#888888', lineHeight: 1.7 }}>
               <p style={{ marginBottom: '1rem' }}>DepGraph can now block PRs that introduce abandoned or malicious packages.</p>
               <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <li><strong style={{ color: '#FFFFFF' }}>Added:</strong> Official GitHub Action <code style={{ color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '0.1rem 0.3rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85em' }}>depgraph/action@v1</code> available in the marketplace.</li>
+                <li><strong style={{ color: '#FFFFFF' }}>Added:</strong> Official GitHub Action <code style={{ color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '0.1rem 0.3rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85em' }}>py-kalki/depgraph-action@v1</code> available in the marketplace.</li>
                 <li><strong style={{ color: '#FFFFFF' }}>Added:</strong> Dashboard UI to generate and revoke API keys (Pro/Team plans).</li>
               </ul>
             </div>

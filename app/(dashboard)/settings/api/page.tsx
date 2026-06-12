@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: depgraph/action@v1
+      - uses: py-kalki/depgraph-action@v1
         with:
           api-key: \${{ secrets.DEPGRAPH_API_KEY }}
           fail-on: critical

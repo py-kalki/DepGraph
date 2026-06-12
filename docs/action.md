@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: depgraph/action@v1
+      - uses: py-kalki/depgraph-action@v1
         with:
           api-key: ${{ secrets.DEPGRAPH_API_KEY }}
           fail-on: critical
@@ -89,7 +89,7 @@ The comment is **updated in place** on each new push to the same PR — never du
 ### Warning-only mode (no failures)
 
 ```yaml
-- uses: depgraph/action@v1
+- uses: py-kalki/depgraph-action@v1
   with:
     api-key: ${{ secrets.DEPGRAPH_API_KEY }}
     fail-on: none
@@ -99,7 +99,7 @@ The comment is **updated in place** on each new push to the same PR — never du
 ### Strict mode — fail on any medium+ risk
 
 ```yaml
-- uses: depgraph/action@v1
+- uses: py-kalki/depgraph-action@v1
   with:
     api-key: ${{ secrets.DEPGRAPH_API_KEY }}
     fail-on: medium
@@ -109,7 +109,7 @@ The comment is **updated in place** on each new push to the same PR — never du
 ### Use outputs in subsequent steps
 
 ```yaml
-- uses: depgraph/action@v1
+- uses: py-kalki/depgraph-action@v1
   id: depgraph
   with:
     api-key: ${{ secrets.DEPGRAPH_API_KEY }}
