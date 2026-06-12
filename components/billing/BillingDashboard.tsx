@@ -18,7 +18,8 @@ export default function BillingDashboard({ plan, subscription, invoices }: Billi
   const [showCancel,  setShowCancel]  = useState(false);
 
   const canUpgrade = plan === 'free';
-  const canCancel  = plan !== 'free' && subscription?.status === 'active';
+  // 'authenticated' = first payment done, waiting for Razorpay to confirm cycle
+  const canCancel  = plan !== 'free' && ['active', 'authenticated'].includes(subscription?.status ?? '');
 
   return (
     <div className="billing-dashboard">

@@ -12,7 +12,7 @@ import {
   verifyPaymentSignature,
   PaymentVerificationError,
 } from '@/lib/services/razorpay/payments';
-import { updateSubscriptionStatus, insertPayment } from '@/lib/db/queries/billing';
+import { updateSubscriptionStatus, insertPayment, insertInvoice } from '@/lib/db/queries/billing';
 import { updateUserPlan, updateUserSubscriptionStatus } from '@/lib/db/queries/users';
 import { getDbClient } from '@/lib/db/client';
 import { getRazorpay } from '@/lib/services/razorpay/client';
@@ -75,20 +75,48 @@ export async function POST(req: Request) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payment = await (razorpay.payments as any).fetch(paymentId) as Record<string, unknown>;
 
-      // Record payment in DB (shows in billing history)
+      const amount   = (payment.amount   as number) ?? 9900;
+      const currency = (payment.currency as string) ?? 'INR';
+
+      // Look up the DB UUID for this subscription (payments.subscription_id is a UUID FK)
+      let dbSubscriptionId: string | null = null;
+      if (subscriptionId) {
+        const db = getDbClient();
+        const { data: subRow } = await db
+          .from('subscriptions')
+          .select('id')
+          .eq('razorpay_subscription_id', subscriptionId)
+          .single();
+        dbSubscriptionId = subRow?.id ?? null;
+      }
+
+      // Record in payments table
       await insertPayment({
         userId:            session.userId,
-        subscriptionId:    subscriptionId ?? null,
+        subscriptionId:    dbSubscriptionId,
         razorpayPaymentId: paymentId,
         razorpayOrderId:   orderId ?? null,
-        amount:            (payment.amount as number) ?? 0,
-        currency:          (payment.currency as string) ?? 'INR',
+        amount,
+        currency,
         status:            'captured',
         capturedAt:        new Date().toISOString(),
       });
+
+      // Also insert into invoices table (what billing dashboard reads)
+      await insertInvoice({
+        userId:            session.userId,
+        subscriptionId:    dbSubscriptionId,
+        razorpayInvoiceId: null,
+        razorpayPaymentId: paymentId,
+        amountPaise:       amount,
+        currency,
+        pdfUrl:            `/api/billing/invoice/${paymentId}`,
+        paidAt:            new Date().toISOString(),
+      });
+
     } catch (e) {
       // Non-fatal — plan is already activated
-      console.warn('[verify-payment] Could not record payment row:', e);
+      console.warn('[verify-payment] Could not record payment/invoice row:', e);
     }
 
     console.log(`[verify-payment] Activated plan=${plan} for user=${session.userId} payment=${paymentId}`);
