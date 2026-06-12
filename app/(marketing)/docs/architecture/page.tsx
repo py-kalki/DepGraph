@@ -65,7 +65,7 @@ export default async function ArchitectureDocs() {
 
       <H2>Data Flow</H2>
       <P>From a single CLI command to a fully scored report:</P>
-      <CodeBlock lang="bash" code={`User: npx depgraph check
+      <CodeBlock lang="bash" code={`User: npx depgraph-scanner check
          │
          ▼
 CLI reads package.json / package-lock.json

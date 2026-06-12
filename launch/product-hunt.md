@@ -20,7 +20,7 @@ We analyze 6 key signals:
 - **npm trends** (are downloads tanking?)
 - **CVEs** (real-time OSV.dev data)
 
-You can run it right now with `npx depgraph check` (no installation required), or add our GitHub Action to automatically fail PRs that introduce risky dependencies.
+You can run it right now with `npx depgraph-scanner check` (no installation required), or add our GitHub Action to automatically fail PRs that introduce risky dependencies.
 
 I'd love to hear your feedback! What signals do you look for when evaluating a new library?
 
@@ -33,7 +33,7 @@ A: Yes! Pro and Team plans support private repos and integrate directly with you
 A: We integrate directly with OSV.dev (Open Source Vulnerabilities) for real-time CVE data.
 
 **Q: Can I use this locally?**
-A: Absolutely. `npx depgraph check` works locally on any machine with Node.js installed.
+A: Absolutely. `npx depgraph-scanner check` works locally on any machine with Node.js installed.
 
 **Q: How is the "Bus Factor" calculated?**
 A: We look at the GitHub contributor data over the last 12 months. If a single developer accounts for >80% of all commits, that's a bus factor of 1 (high risk).

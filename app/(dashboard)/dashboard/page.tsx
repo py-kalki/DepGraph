@@ -58,7 +58,7 @@ export default async function DashboardPage() {
       <EmptyState
         IconComponent={Search}
         title="No scans yet"
-        description={`Project "${project.name}" has no scans. Run 'npx depgraph check' to create your first report.`}
+        description={`Project "${project.name}" has no scans. Run 'npx depgraph-scanner check' to create your first report.`}
       />
     );
   }

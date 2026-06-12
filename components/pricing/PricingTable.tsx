@@ -9,7 +9,7 @@ const PLANS = [
     cta:         'Get started',
     ctaHref:     '/dashboard',
     features: [
-      'npx depgraph check on any public project',
+      'npx depgraph-scanner check on any public project',
       'Up to 3 saved projects',
       'Public repositories only',
       'Health scores + basic risk flags',

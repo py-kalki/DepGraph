@@ -69,7 +69,7 @@ export default function FeaturesPage() {
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', marginBottom: '1rem' }}>Zero-Install CLI</h2>
                 <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-                  Run <code>npx depgraph check</code> in any Node.js project to get an instant health report directly in your terminal. No login or configuration required.
+                  Run <code>npx depgraph-scanner check</code> in any Node.js project to get an instant health report directly in your terminal. No login or configuration required.
                 </p>
                 <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
                   Scans deep into your transitive graph to find hidden risks, outputting a color-coded table and a shareable web link to view the full report.
@@ -81,7 +81,7 @@ export default function FeaturesPage() {
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#EAB308' }} />
                   <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#22C55E' }} />
                 </div>
-                <p style={{ color: '#10B981', marginBottom: '1rem' }}>$ npx depgraph check</p>
+                <p style={{ color: '#10B981', marginBottom: '1rem' }}>$ npx depgraph-scanner check</p>
                 <p style={{ color: '#9CA3AF', marginBottom: '1rem' }}>DepGraph v1.0 — Scanning 247 dependencies...</p>
                 <p style={{ color: '#3B82F6', marginBottom: '1rem' }}>Project Health Score: 71 / 100 ▓▓▓▓▓▓▓░░░</p>
                 <p style={{ color: '#EF4444' }}>CRITICAL (2)</p>

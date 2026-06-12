@@ -46,14 +46,14 @@ export default async function CliDocs() {
 
       <H2>Installation</H2>
       <P>Run instantly with <Code>npx</Code> — no install step needed:</P>
-      <CodeBlock lang="bash" code={`npx depgraph check`} />
+      <CodeBlock lang="bash" code={`npx depgraph-scanner check`} />
       <P>Or install globally for frequent use:</P>
       <CodeBlock lang="bash" code={`npm install -g depgraph\ndepgraph check`} />
 
       <H2>Commands</H2>
       <H3>$ depgraph check</H3>
       <P>Scan the current project's dependencies and return a scored report.</P>
-      <CodeBlock lang="bash" code={`npx depgraph check [options]`} />
+      <CodeBlock lang="bash" code={`npx depgraph-scanner check [options]`} />
 
       <P>Options:</P>
       <Table>
@@ -93,11 +93,11 @@ export default async function CliDocs() {
 
       <H2>Authentication</H2>
       <P>Link CLI scans to your Pro dashboard with GitHub OAuth:</P>
-      <CodeBlock lang="bash" code={`npx depgraph auth`} />
+      <CodeBlock lang="bash" code={`npx depgraph-scanner auth`} />
       <P>This opens a browser window for GitHub login and writes your API key to <Code>~/.depgraph/config.json</Code>.</P>
 
       <H2>JSON Output (for CI)</H2>
-      <CodeBlock lang="bash" code={`npx depgraph check --format json | jq '.overallScore'`} />
+      <CodeBlock lang="bash" code={`npx depgraph-scanner check --format json | jq '.overallScore'`} />
     </div>
   );
 }

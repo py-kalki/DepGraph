@@ -5,7 +5,7 @@
 No installation required. Use `npx`:
 
 ```bash
-npx depgraph check
+npx depgraph-scanner check
 ```
 
 Or install globally:
@@ -24,7 +24,7 @@ depgraph check
 Scan the current project's dependencies.
 
 ```bash
-npx depgraph check [options]
+npx depgraph-scanner check [options]
 ```
 
 **Options:**
@@ -71,7 +71,7 @@ DepGraph v1.0 — Scanning 247 dependencies...
 ## Authentication
 
 ```bash
-npx depgraph auth
+npx depgraph-scanner auth
 ```
 
 Opens browser for GitHub OAuth login. Writes API key to `~/.depgraph/config.json`.
@@ -81,5 +81,5 @@ Opens browser for GitHub OAuth login. Writes API key to `~/.depgraph/config.json
 ## JSON Output (for CI)
 
 ```bash
-npx depgraph check --format json | jq '.overallScore'
+npx depgraph-scanner check --format json | jq '.overallScore'
 ```

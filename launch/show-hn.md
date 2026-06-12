@@ -23,7 +23,7 @@ It boils this down into a 0-100 health score. You can drop it into CI to fail PR
 - Caching layer built on Redis (Upstash) to avoid rate limits (we cache scores for 24h)
 - Web dashboard built with Next.js App Router and Supabase
 
-You can try it immediately with zero config: `npx depgraph check`
+You can try it immediately with zero config: `npx depgraph-scanner check`
 
 I'd love your feedback on the scoring algorithm. What heuristic do you use to decide if an open-source library is safe to depend on?
 

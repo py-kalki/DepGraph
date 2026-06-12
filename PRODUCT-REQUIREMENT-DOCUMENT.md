@@ -37,7 +37,7 @@
 
 Unlike reactive tools (Snyk, Dependabot) that only alert after a vulnerability is published, DepGraph is *predictive* — surfacing libraries at risk of abandonment, maintainer compromise, or breaking changes *before* they become production emergencies.
 
-The MVP targets JavaScript/npm projects and is delivered as a CLI tool (`npx depgraph check`), a web dashboard, and a CI/CD GitHub Action. Solo-buildable in 6–8 weeks. Revenue starts at week 5.
+The MVP targets JavaScript/npm projects and is delivered as a CLI tool (`npx depgraph-scanner check`), a web dashboard, and a CI/CD GitHub Action. Solo-buildable in 6–8 weeks. Revenue starts at week 5.
 
 ---
 
@@ -158,7 +158,7 @@ This creates three expensive failure modes:
 
 | Channel | Description | Priority |
 |---|---|---|
-| CLI (`npx depgraph check`) | Zero-install audit for any repo | P0 |
+| CLI (`npx depgraph-scanner check`) | Zero-install audit for any repo | P0 |
 | Web dashboard | Full project view with history and alerts | P0 |
 | GitHub Action | CI/CD gate with pass/fail thresholds | P1 |
 | VS Code extension | Inline health scores in editor | P2 |
@@ -176,7 +176,7 @@ This creates three expensive failure modes:
 
 **What he wants:** A quick scan that tells him which libraries to worry about, ranked by risk. Under 2 minutes, zero configuration.
 
-**How DepGraph helps:** `npx depgraph check` gives him a risk-ranked report in 30 seconds. Weekly email digests surface new risks without him having to think about it.
+**How DepGraph helps:** `npx depgraph-scanner check` gives him a risk-ranked report in 30 seconds. Weekly email digests surface new risks without him having to think about it.
 
 ---
 
@@ -210,7 +210,7 @@ This creates three expensive failure modes:
 
 | ID | As a... | I want to... | So that... | Priority |
 |---|---|---|---|---|
-| US-01 | developer | run `npx depgraph check` in any project | I get an instant health report without installing anything | P0 |
+| US-01 | developer | run `npx depgraph-scanner check` in any project | I get an instant health report without installing anything | P0 |
 | US-02 | developer | see a health score (0–100) for each dependency | I can prioritize which to investigate first | P0 |
 | US-03 | developer | see which dependencies are at high risk of abandonment | I can proactively migrate before they break | P0 |
 | US-04 | developer | see the full transitive dependency graph | I understand risk beyond my direct dependencies | P0 |
@@ -235,7 +235,7 @@ This creates three expensive failure modes:
 
 ## 9. Feature Specifications — MVP
 
-### F-01: CLI Scanner (`npx depgraph check`)
+### F-01: CLI Scanner (`npx depgraph-scanner check`)
 
 **Description:** Zero-install CLI that scans a project's `package.json` (and `package-lock.json` for transitive deps), queries DepGraph's API, and renders a terminal report.
 
@@ -252,11 +252,11 @@ This creates three expensive failure modes:
 **CLI flags:**
 
 ```bash
-npx depgraph check                  # scan current directory
-npx depgraph check --path ./app     # scan specific path
-npx depgraph check --format json    # output as JSON (for CI)
-npx depgraph check --threshold 60   # exit code 1 if score < 60
-npx depgraph check --depth 2        # limit transitive depth
+npx depgraph-scanner check                  # scan current directory
+npx depgraph-scanner check --path ./app     # scan specific path
+npx depgraph-scanner check --format json    # output as JSON (for CI)
+npx depgraph-scanner check --threshold 60   # exit code 1 if score < 60
+npx depgraph-scanner check --depth 2        # limit transitive depth
 ```
 
 **Terminal output example:**
@@ -277,7 +277,7 @@ DepGraph v1.0 — Scanning 247 dependencies...
   HIGH (7)   MEDIUM (18)   LOW (41)   HEALTHY (179)
 
   Full report: https://depgraph.vedanshh.dev/r/a3f9x2k1
-  Run `npx depgraph fix` to see migration paths.
+  Run `npx depgraph-scanner fix` to see migration paths.
 ```
 
 **Acceptance criteria:**
@@ -495,7 +495,7 @@ Inline health score annotations in `package.json`:
 ### Data flow
 
 ```
-User runs: npx depgraph check
+User runs: npx depgraph-scanner check
          │
          ▼
 CLI reads package.json + package-lock.json
@@ -670,7 +670,7 @@ GET  /api/user/usage
 ### CLI authentication flow
 
 ```
-npx depgraph auth
+npx depgraph-scanner auth
 → Opens browser to https://depgraph.vedanshh.dev/auth/cli?device_code=XXX
 → User logs in with GitHub
 → API key written to ~/.depgraph/config.json
@@ -701,7 +701,7 @@ npx depgraph auth
 ### Key screens
 
 **Screen 1: Landing page (`/`)**
-- Hero: animated terminal showing `npx depgraph check` running
+- Hero: animated terminal showing `npx depgraph-scanner check` running
 - Live stats: "X packages scored today, Y risks detected"
 - Sample report preview
 - Pricing section
@@ -735,7 +735,7 @@ npx depgraph auth
 ### Tier structure
 
 **Free**
-- `npx depgraph check` for any public project
+- `npx depgraph-scanner check` for any public project
 - Up to 3 saved projects (public repos only)
 - Health scores + basic risk flags
 - 30-day score history
@@ -790,7 +790,7 @@ npx depgraph auth
 - Build in public on Twitter/X — share weekly build updates
 - Post on dev.to and Hashnode: "I built a tool to predict dependency abandonment"
 - Reach out to 20 open-source maintainers for beta access + feedback
-- Plant `npx depgraph check` in relevant GitHub issue threads (where it's genuinely helpful, not spam)
+- Plant `npx depgraph-scanner check` in relevant GitHub issue threads (where it's genuinely helpful, not spam)
 
 ### Phase 2: Launch (week 5–6)
 
@@ -808,7 +808,7 @@ npx depgraph auth
 
 ### Key distribution insight
 
-The CLI's `--share` output (a public URL to the report) is viral by design. When someone runs `npx depgraph check` and shares the report URL in a PR or Slack thread, every person who clicks it sees DepGraph and can run it on their own project. This is the Loom/Notion "made with" flywheel applied to developer tooling.
+The CLI's `--share` output (a public URL to the report) is viral by design. When someone runs `npx depgraph-scanner check` and shares the report URL in a PR or Slack thread, every person who clicks it sees DepGraph and can run it on their own project. This is the Loom/Notion "made with" flywheel applied to developer tooling.
 
 ---
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 const LINES = [
-  { delay: 0,    text: '$ npx depgraph check', type: 'cmd' },
+  { delay: 0,    text: '$ npx depgraph-scanner check', type: 'cmd' },
   { delay: 600,  text: 'DepGraph v1.0 — Scanning 247 dependencies...', type: 'info' },
   { delay: 1400, text: '', type: 'blank' },
   { delay: 1600, text: '  Project Health Score: 71 / 100  ▓▓▓▓▓▓▓░░░', type: 'score' },
@@ -58,7 +58,7 @@ export default function TerminalDemo() {
       ref={containerRef}
       className="terminal-demo"
       role="img"
-      aria-label="Terminal showing npx depgraph check output"
+      aria-label="Terminal showing npx depgraph-scanner check output"
     >
       <div className="terminal-header">
         <span className="terminal-dot" style={{ background: '#E24B4A' }} />

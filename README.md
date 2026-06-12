@@ -13,7 +13,7 @@ DepGraph gives you real-time health scores, abandonment risk forecasts, and supp
 ## Quick Start
 
 ```bash
-npx depgraph check
+npx depgraph-scanner check
 ```
 
 No installation. No configuration. Run it in any JavaScript project directory and get a scored dependency health report in under 30 seconds.
@@ -35,19 +35,19 @@ No installation. No configuration. Run it in any JavaScript project directory an
 
 ```bash
 # Scan current directory
-npx depgraph check
+npx depgraph-scanner check
 
 # Scan a specific path
-npx depgraph check --path ./packages/api
+npx depgraph-scanner check --path ./packages/api
 
 # Output as JSON (for CI pipelines)
-npx depgraph check --format json
+npx depgraph-scanner check --format json
 
 # Fail if project score drops below threshold
-npx depgraph check --threshold 60
+npx depgraph-scanner check --threshold 60
 
 # Limit transitive dependency depth
-npx depgraph check --depth 2
+npx depgraph-scanner check --depth 2
 ```
 
 ### Exit codes

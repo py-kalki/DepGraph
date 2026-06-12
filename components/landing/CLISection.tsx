@@ -14,7 +14,7 @@ const workflows: { id: string; label: string; title: string; code: CodeLine[] }[
     label: 'CLI',
     title: 'Instant scan, zero config.',
     code: [
-      { prompt: true, text: 'npx depgraph check', key: true },
+      { prompt: true, text: 'npx depgraph-scanner check', key: true },
       { prompt: false, text: '\u2713 Scanning 312 packages...' },
       { prompt: false, text: '\u2713 Fetching GitHub activity...' },
       { prompt: false, text: '' },

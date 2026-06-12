@@ -17,7 +17,7 @@
 ## Data Flow
 
 ```
-User: npx depgraph check
+User: npx depgraph-scanner check
          │
          ▼
 CLI reads package.json / package-lock.json
