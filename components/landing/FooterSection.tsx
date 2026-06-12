@@ -127,9 +127,14 @@ export default function FooterSection() {
             gap: '1.5rem',
           }}
         >
-          <p style={{ fontSize: '0.875rem', color: '#666666', fontWeight: 500 }}>
-            © {new Date().getFullYear()} DepGraph. Built in public.
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#666666', fontWeight: 500, margin: 0 }}>
+              © {new Date().getFullYear()} DepGraph. Built in public.
+            </p>
+            <p style={{ fontSize: '0.875rem', color: '#666666', fontWeight: 500, margin: 0 }}>
+              Founded by <a href="https://www.vedanshh.dev" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none' }} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}>Vedansh Danot</a>
+            </p>
+          </div>
           <p style={{ fontSize: '0.875rem', color: '#666666', fontWeight: 500 }}>
             Powered by{' '}
             <span style={{ color: '#FFFFFF' }}>GitHub API</span>

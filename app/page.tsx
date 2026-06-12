@@ -15,10 +15,20 @@ export const metadata: Metadata = {
   title: 'DepGraph — Predict dependency failures before they reach production',
   description:
     'Real-time health scores for every npm package. Spot abandonment risk, supply chain threats, and CVEs before they become production incidents.',
+  keywords: ['predict dependency failures', 'npm package health', 'abandonment risk', 'supply chain threats', 'CVE detection', 'DepGraph'],
   openGraph: {
     title: 'DepGraph — Dependency Intelligence Platform',
     description: 'Real-time health scores for every npm package. Predict failures before production.',
     type: 'website',
+    url: 'https://depgraph.com',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DepGraph — Predict dependency failures',
+    description: 'Real-time health scores for every npm package. Spot abandonment risk and CVEs.',
+  },
+  alternates: {
+    canonical: '/',
   },
 };
 

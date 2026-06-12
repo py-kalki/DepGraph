@@ -3,7 +3,22 @@ import FooterSection from '@/components/landing/FooterSection';
 
 export const metadata = {
   title: 'About Us — DepGraph',
-  description: 'The story and mission behind DepGraph.',
+  description: 'The story and mission behind DepGraph. We build tools for the paranoid to solve the software supply chain crisis.',
+  keywords: ['About DepGraph', 'security researchers', 'open-source veterans', 'supply chain crisis', 'DepGraph mission'],
+  openGraph: {
+    title: 'About Us — DepGraph',
+    description: 'The story and mission behind DepGraph. We build tools for the paranoid to solve the software supply chain crisis.',
+    type: 'website',
+    url: 'https://depgraph.com/about',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Us — DepGraph',
+    description: 'The story and mission behind DepGraph. We build tools for the paranoid.',
+  },
+  alternates: {
+    canonical: '/about',
+  },
 };
 
 export default function AboutPage() {
@@ -45,6 +60,9 @@ export default function AboutPage() {
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Built for scale.</h2>
             <p>
               Headquartered entirely on the internet, our systems analyze over 4 million packages daily. We are funded by engineers, for engineers.
+            </p>
+            <p style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <strong>Founded by <a href="https://www.vedanshh.dev" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Vedansh Danot</a>.</strong>
             </p>
           </div>
 
