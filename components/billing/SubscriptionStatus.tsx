@@ -10,7 +10,7 @@ const STATUS_LABELS: Record<string, string> = {
   past_due:      'Payment failed',
   cancelled:     'Cancelled',
   halted:        'Halted — update payment',
-  authenticated: 'Pending activation',
+  authenticated: 'Active',   // first payment done, subscription is live
   created:       'Pending',
 };
 
@@ -19,7 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
   past_due:      'var(--risk-high)',
   cancelled:     'var(--text-muted)',
   halted:        'var(--risk-critical)',
-  authenticated: 'var(--risk-medium)',
+  authenticated: 'var(--healthy)',   // same green as active
   created:       'var(--risk-medium)',
 };
 

@@ -6,7 +6,7 @@
 
 import type { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
-import { upsertUser } from '@/lib/db/queries/users';
+import { upsertUser, getUserById } from '@/lib/db/queries/users';
 import { trackSignup } from '@/lib/analytics/events';
 
 declare module 'next-auth' {
@@ -66,6 +66,7 @@ export const authOptions: NextAuthOptions = {
      */
     async jwt({ token, user: _user, account, profile }) {
       if (account && profile) {
+        // First sign-in: upsert user and embed IDs into token
         const githubProfile = profile as { id: number; login: string };
         const { user: dbUser, isNew } = await upsertUser({
           githubId: githubProfile.id,
@@ -78,6 +79,15 @@ export const authOptions: NextAuthOptions = {
 
         if (isNew) {
           trackSignup(dbUser.id, { plan: dbUser.plan, githubLogin: githubProfile.login });
+        }
+      } else if (token.userId) {
+        // Subsequent requests: refresh plan from DB so upgrades are reflected
+        // without requiring the user to sign out and back in.
+        try {
+          const dbUser = await getUserById(token.userId);
+          if (dbUser) token.plan = dbUser.plan;
+        } catch {
+          // Non-fatal — keep existing token plan
         }
       }
       return token;

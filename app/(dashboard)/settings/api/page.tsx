@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/config';
 import { getApiKeysByUserId } from '@/lib/db/queries/apiKeys';
+import { getUserById } from '@/lib/db/queries/users';
 import ApiKeyManager from '@/components/settings/ApiKeyManager';
 
 export const metadata = {
@@ -13,8 +14,12 @@ export default async function ApiSettingsPage() {
   const session = await getServerSession(authOptions);
   if (!session?.userId) redirect('/login');
 
-  const plan = (session as { plan?: string }).plan ?? 'free';
-  const keys = await getApiKeysByUserId(session.userId);
+  // Read plan from DB directly — JWT may be stale after an upgrade
+  const [dbUser, keys] = await Promise.all([
+    getUserById(session.userId),
+    getApiKeysByUserId(session.userId),
+  ]);
+  const plan = (dbUser?.plan ?? 'free') as 'free' | 'pro';
   // Strip key_hash before passing to client
   const safeKeys = keys.map(({ key_hash: _h, ...rest }) => rest);
 
