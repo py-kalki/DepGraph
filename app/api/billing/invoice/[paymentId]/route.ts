@@ -77,25 +77,23 @@ export async function GET(req: NextRequest, { params }: Props) {
       margin-bottom: 3rem;
     }
 
-    /* Logo: exact match to depGraph wordmark */
+    /* Logo: exact match to navbar wordmark */
     .logo {
       display: inline-flex;
       align-items: baseline;
-      background: #000000;
-      padding: 0.45rem 0.75rem;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
       line-height: 1;
+      color: #000000;
+      text-decoration: none;
     }
     .logo-dep {
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: #ffffff;
-      letter-spacing: -0.03em;
+      font-weight: 300;
+      font-style: italic;
     }
     .logo-graph {
-      font-size: 1.25rem;
       font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.03em;
+      font-family: Arial, 'Helvetica Neue', sans-serif;
     }
 
     .header-right {
