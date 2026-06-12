@@ -48,46 +48,34 @@ export default async function ReportPage({ params }: Props) {
 
   return (
     <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', fontFamily: 'JetBrains Mono, monospace' }}>
-      {/* Navbar */}
+      {/* Navbar — matches LandingNavbar exactly */}
       <header style={{
+        position: 'sticky', top: 0, zIndex: 1000,
         borderBottom: '1px solid rgba(255,255,255,0.1)',
-        padding: '0 2rem',
-        height: '56px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        position: 'sticky',
-        top: 0,
-        background: '#000000',
-        zIndex: 100,
+        background: 'rgba(0,0,0,0.9)',
+        backdropFilter: 'blur(16px)',
       }}>
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '1rem',
-            fontWeight: 700,
-            color: '#FFFFFF',
-            letterSpacing: '-0.02em',
-          }}>
-            depgraph
-          </span>
-        </Link>
-        <Link
-          href="/login"
-          style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            color: '#000000',
-            background: '#FFFFFF',
-            padding: '0.4rem 1rem',
-            textDecoration: 'none',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-          }}
-        >
-          Sign In →
-        </Link>
+        <div style={{
+          maxWidth: '1160px', margin: '0 auto',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 1.5rem', height: '64px',
+        }}>
+          {/* Logo — identical to homepage */}
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#FFFFFF', fontSize: '1.35rem', letterSpacing: '-0.04em' }}>
+            <span style={{ fontWeight: 300, fontStyle: 'italic' }}>dep</span>
+            <span style={{ fontWeight: 800 }}>Graph</span>
+          </Link>
+
+          {/* Right CTA */}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link href="/login" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#888888', textDecoration: 'none' }}>
+              Sign In
+            </Link>
+            <Link href="/dashboard" style={{ padding: '0.5rem 1.25rem', background: '#FFFFFF', color: '#000000', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
+              Start Free
+            </Link>
+          </div>
+        </div>
       </header>
 
       {/* Page content */}

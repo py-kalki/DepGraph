@@ -48,7 +48,7 @@ export default async function CliDocs() {
       <P>Run instantly with <Code>npx</Code> — no install step needed:</P>
       <CodeBlock lang="bash" code={`npx depgraph-scanner check`} />
       <P>Or install globally for frequent use:</P>
-      <CodeBlock lang="bash" code={`npm install -g depgraph\ndepgraph check`} />
+      <CodeBlock lang="bash" code={`npm install -g depgraph-scanner\ndepgraph check`} />
 
       <H2>Commands</H2>
       <H3>$ depgraph check</H3>
@@ -92,9 +92,12 @@ export default async function CliDocs() {
       </Table>
 
       <H2>Authentication</H2>
-      <P>Link CLI scans to your Pro dashboard with GitHub OAuth:</P>
+      <P>Link CLI scans to your dashboard by authenticating with your API key:</P>
       <CodeBlock lang="bash" code={`npx depgraph-scanner auth`} />
-      <P>This opens a browser window for GitHub login and writes your API key to <Code>~/.depgraph/config.json</Code>.</P>
+      <P>You will be prompted to paste your API key. Get it from your <Code>Settings → API Keys</Code> page at <Code>depgraph.vedanshh.dev/settings/api</Code>. Your key is saved to <Code>~/.depgraph/config.json</Code>.</P>
+      <P>Or provide it directly without a prompt:</P>
+      <CodeBlock lang="bash" code={`npx depgraph-scanner auth --token YOUR_API_KEY`} />
+      <P>Once authenticated, all scans are automatically linked to your account and visible in your dashboard.</P>
 
       <H2>JSON Output (for CI)</H2>
       <CodeBlock lang="bash" code={`npx depgraph-scanner check --format json | jq '.overallScore'`} />
