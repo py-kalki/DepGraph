@@ -66,7 +66,7 @@ export default async function DashboardPage() {
   const history = await getProjectHistory(project.id, 30);
 
   // Compute risk counts from dep_scores
-  const depScores = latestScan.dep_scores;
+  const depScores = latestScan.dep_scores ?? [];
   const criticalCount  = depScores.filter((d) => d.risk_level === 'critical').length;
   const highCount      = depScores.filter((d) => d.risk_level === 'high').length;
   const mediumCount    = depScores.filter((d) => d.risk_level === 'medium').length;

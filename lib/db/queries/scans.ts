@@ -83,7 +83,7 @@ export async function getProjectScanHistory(
 
   const { data, error } = await db
     .from('scan_reports')
-    .select('id, share_token, overall_score, total_deps, critical_count, high_count, created_at')
+    .select('id, share_token, overall_score, total_deps, critical_count, high_count, dep_scores, created_at')
     .eq('project_id', projectId)
     .order('created_at', { ascending: false })
     .limit(limit);
