@@ -1,9 +1,10 @@
 // =============================================================================
-// DepGraph — Public Report Page (/report/[shareToken])
+// DepGraph — Public Report Page (/r/[shareToken])
 // No authentication required — PRD §F-03: "Anonymous public view for shared URLs"
 // =============================================================================
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getScanReportByToken } from '@/lib/db/queries/scans';
 import { ReportCard } from '@/components/report/ReportCard';
 import { ReportDepsTable } from '@/components/report/ReportDepsTable';
@@ -16,7 +17,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { shareToken } = await params;
   return {
-    title: `Dependency Report — DepGraph`,
+    title: `Dependency Health Report — DepGraph`,
     description: `View the dependency health report for share token ${shareToken}.`,
   };
 }
@@ -26,7 +27,7 @@ export default async function ReportPage({ params }: Props) {
 
   if (!shareToken || shareToken.length > 30) {
     return (
-      <div className="report-page">
+      <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <ErrorState title="Invalid Report" message="The share token in this URL is not valid." />
       </div>
     );
@@ -36,7 +37,7 @@ export default async function ReportPage({ params }: Props) {
 
   if (!report) {
     return (
-      <div className="report-page">
+      <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <ErrorState
           title="Report Not Found"
           message="This report may have been deleted or the URL is incorrect."
@@ -46,45 +47,96 @@ export default async function ReportPage({ params }: Props) {
   }
 
   return (
-    <div className="report-page">
-      {/* Minimal public header — no auth required */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-          paddingBottom: '1rem',
-          borderBottom: '1px solid var(--bg-border)',
-        }}
-      >
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '1.1rem',
+    <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', fontFamily: 'JetBrains Mono, monospace' }}>
+      {/* Navbar */}
+      <header style={{
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        padding: '0 2rem',
+        height: '56px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'sticky',
+        top: 0,
+        background: '#000000',
+        zIndex: 100,
+      }}>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <span style={{
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '1rem',
             fontWeight: 700,
-            color: 'var(--text-primary)',
-          }}
-        >
-          Dep<span style={{ color: 'var(--brand-primary)' }}>Graph</span>
-        </div>
-        <a
+            color: '#FFFFFF',
+            letterSpacing: '-0.02em',
+          }}>
+            depgraph
+          </span>
+        </Link>
+        <Link
           href="/login"
           style={{
-            fontSize: '0.8125rem',
-            color: 'var(--brand-primary)',
-            fontWeight: 500,
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            color: '#000000',
+            background: '#FFFFFF',
+            padding: '0.4rem 1rem',
+            textDecoration: 'none',
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase',
           }}
         >
-          Sign in to track your own projects →
-        </a>
-      </div>
+          Sign In →
+        </Link>
+      </header>
 
-      <ReportCard report={report} />
+      {/* Page content */}
+      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 2rem' }}>
+        <ReportCard report={report} />
+        <div style={{ marginTop: '2rem' }}>
+          <ReportDepsTable report={report} />
+        </div>
 
-      <div style={{ marginTop: '1.5rem' }}>
-        <ReportDepsTable report={report} />
-      </div>
+        {/* Footer CTA */}
+        <div style={{
+          marginTop: '3rem',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          paddingTop: '2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem',
+          textAlign: 'center',
+        }}>
+          <p style={{ color: '#666666', fontSize: '0.875rem', fontFamily: 'JetBrains Mono, monospace' }}>
+            Scan your own project in 30 seconds
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+            <Link href="/login" style={{
+              padding: '0.75rem 1.5rem',
+              background: '#FFFFFF',
+              color: '#000000',
+              textDecoration: 'none',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.8125rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+            }}>
+              Get Started Free →
+            </Link>
+            <code style={{
+              padding: '0.75rem 1.5rem',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: '#888888',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.8125rem',
+            }}>
+              npx depgraph-scanner check
+            </code>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
