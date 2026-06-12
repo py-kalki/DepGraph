@@ -99,19 +99,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const counts = countByRiskLevel(packageScores);
     const env = getEnv();
 
-    // 4. Resolve project — find or create a CLI project for this user
+    // 4. Resolve project — find by exact name or create new one for this user
     let resolvedProjectId: string | null = null;
     if (userId) {
       try {
         const userProjects = await getUserProjects(userId);
-        // Find existing CLI project or use first project
-        const cliProject = userProjects.find(p => p.name === projectName) ?? userProjects[0] ?? null;
-        if (cliProject) {
-          resolvedProjectId = cliProject.id;
-          // Update project score
-          await updateProjectScore(cliProject.id, overallScore);
+        // Match by exact project name (the folder name sent by CLI)
+        const matchedProject = userProjects.find(
+          (p) => p.name.toLowerCase() === projectName.toLowerCase()
+        ) ?? null;
+
+        if (matchedProject) {
+          resolvedProjectId = matchedProject.id;
+          await updateProjectScore(matchedProject.id, overallScore);
         } else {
-          // Create a new project for this user
+          // Create a new project named after the folder
           const newProject = await createProject(userId, projectName, null);
           resolvedProjectId = newProject.id;
         }
