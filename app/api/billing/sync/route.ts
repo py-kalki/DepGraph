@@ -24,10 +24,16 @@ export async function POST() {
     const razorpay = getRazorpay();
     const db = getDbClient();
 
-    // Fetch all payments for this subscription from Razorpay
+    // Only fetch payments created AFTER this subscription was recorded in our DB.
+    // This prevents historical payments from earlier subscriptions/accounts bleeding in.
+    const subscriptionCreatedAt = subscription.created_at
+      ? Math.floor(new Date(subscription.created_at).getTime() / 1000)
+      : Math.floor(Date.now() / 1000) - 86400; // default: last 24h
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await (razorpay.payments as any).all({
       subscription_id: subscription.razorpay_subscription_id,
+      from:  subscriptionCreatedAt,
       count: 20,
     }) as { items?: Record<string, unknown>[] };
 
@@ -37,6 +43,13 @@ export async function POST() {
     for (const payment of payments) {
       const paymentId = payment.id as string;
       if (!paymentId) continue;
+
+      // Skip payments outside expected amount range (₹99 = 9900 paise, allow ±50%)
+      const amount = (payment.amount as number) ?? 0;
+      if (amount > 20000) {
+        console.log(`[billing/sync] Skipping payment ${paymentId} with amount ${amount} (too high)`);
+        continue;
+      }
 
       // Check if we already have this invoice
       const { data: existing } = await db
@@ -53,7 +66,7 @@ export async function POST() {
         subscriptionId:    subscription.id,
         razorpayInvoiceId: null,
         razorpayPaymentId: paymentId,
-        amountPaise:       (payment.amount as number) ?? 9900,
+        amountPaise:       amount,
         currency:          (payment.currency as string) ?? 'INR',
         pdfUrl:            `/api/billing/invoice/${paymentId}`,
         paidAt:            payment.created_at
