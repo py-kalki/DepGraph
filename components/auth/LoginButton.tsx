@@ -6,11 +6,11 @@
 
 import { signIn } from 'next-auth/react';
 
-export function LoginButton() {
+export function LoginButton({ callbackUrl = '/dashboard' }: { callbackUrl?: string }) {
   return (
     <button
       id="btn-signin-github"
-      onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
+      onClick={() => signIn('github', { callbackUrl })}
       type="button"
       style={{
         display: 'flex',

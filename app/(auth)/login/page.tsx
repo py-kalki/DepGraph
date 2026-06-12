@@ -1,7 +1,7 @@
 // =============================================================================
 // DepGraph — Login Page (/login)
 // Public page — GitHub OAuth entry point.
-// PRD §F-04: GitHub OAuth only (V1).
+// Reads ?callbackUrl from the URL to redirect back (e.g. to a report page).
 // =============================================================================
 
 import type { Metadata } from 'next';
@@ -14,7 +14,15 @@ export const metadata: Metadata = {
   description: 'Sign in with GitHub to track your project dependency health.',
 };
 
-export default function LoginPage() {
+interface Props {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { callbackUrl } = await searchParams;
+  const safeCb = callbackUrl ?? '/dashboard';
+  const isReportCallback = safeCb.startsWith('/r/');
+
   return (
     <main style={{ 
       minHeight: '100vh', 
@@ -25,7 +33,7 @@ export default function LoginPage() {
     }}>
       <HoverCardEffect />
       
-      {/* Brutalist header just for the logo */}
+      {/* Header */}
       <header style={{
         padding: '1.5rem',
         borderBottom: '1px solid rgba(255,255,255,0.15)',
@@ -65,7 +73,7 @@ export default function LoginPage() {
             marginBottom: '1rem',
             lineHeight: 1.1
           }}>
-            Access Intelligence
+            {isReportCallback ? 'Save Your Report' : 'Access Intelligence'}
           </h1>
           
           <p style={{
@@ -74,10 +82,14 @@ export default function LoginPage() {
             lineHeight: 1.6,
             marginBottom: '3rem'
           }}>
-            Sign in to start tracking abandonment risk and health scores for your open-source dependencies.
+            {isReportCallback
+              ? 'Sign in with GitHub to save this report to your dashboard and track it over time.'
+              : 'Sign in to start tracking abandonment risk and health scores for your open-source dependencies.'
+            }
           </p>
 
-          <LoginButton />
+          {/* Pass callbackUrl so GitHub redirects back to the report */}
+          <LoginButton callbackUrl={safeCb} />
 
           <div style={{
             marginTop: '3rem',

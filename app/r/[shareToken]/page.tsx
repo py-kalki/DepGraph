@@ -1,13 +1,18 @@
 // =============================================================================
 // DepGraph — Public Report Page (/r/[shareToken])
 // No authentication required — PRD §F-03: "Anonymous public view for shared URLs"
+// If authenticated: shows Dashboard button.
+// If not: Sign In links pass callbackUrl so user lands back here after login.
 // =============================================================================
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/config';
 import { getScanReportByToken } from '@/lib/db/queries/scans';
 import { ReportCard } from '@/components/report/ReportCard';
 import { ReportDepsTable } from '@/components/report/ReportDepsTable';
+import { ReportClaimHandler } from '@/components/report/ReportClaimHandler';
 import { ErrorState } from '@/components/ui/ErrorState';
 
 interface Props {
@@ -24,6 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ReportPage({ params }: Props) {
   const { shareToken } = await params;
+  const session = await getServerSession(authOptions);
+  const isLoggedIn = !!session?.userId;
+
+  // The callback URL to use in Sign In links
+  const callbackUrl = encodeURIComponent(`/r/${shareToken}`);
 
   if (!shareToken || shareToken.length > 30) {
     return (
@@ -48,7 +58,7 @@ export default async function ReportPage({ params }: Props) {
 
   return (
     <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', fontFamily: 'JetBrains Mono, monospace' }}>
-      {/* Navbar — matches LandingNavbar exactly */}
+      {/* Navbar */}
       <header style={{
         position: 'sticky', top: 0, zIndex: 1000,
         borderBottom: '1px solid rgba(255,255,255,0.1)',
@@ -60,23 +70,45 @@ export default async function ReportPage({ params }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 1.5rem', height: '64px',
         }}>
-          {/* Logo — identical to homepage */}
+          {/* Logo */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#FFFFFF', fontSize: '1.35rem', letterSpacing: '-0.04em' }}>
             <span style={{ fontWeight: 300, fontStyle: 'italic' }}>dep</span>
             <span style={{ fontWeight: 800 }}>Graph</span>
           </Link>
 
-          {/* Right CTA */}
+          {/* Right CTA — context-aware */}
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <Link href="/login" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#888888', textDecoration: 'none' }}>
-              Sign In
-            </Link>
-            <Link href="/dashboard" style={{ padding: '0.5rem 1.25rem', background: '#FFFFFF', color: '#000000', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-              Start Free
-            </Link>
+            {isLoggedIn ? (
+              // Authenticated: show Dashboard button
+              <Link
+                href="/dashboard"
+                style={{ padding: '0.5rem 1.25rem', background: '#FFFFFF', color: '#000000', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}
+              >
+                Dashboard →
+              </Link>
+            ) : (
+              // Unauthenticated: Sign In returns them to this report
+              <>
+                <Link
+                  href={`/login?callbackUrl=${callbackUrl}`}
+                  style={{ fontSize: '0.875rem', fontWeight: 600, color: '#888888', textDecoration: 'none' }}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href={`/login?callbackUrl=${callbackUrl}`}
+                  style={{ padding: '0.5rem 1.25rem', background: '#FFFFFF', color: '#000000', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}
+                >
+                  Start Free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
+
+      {/* Auto-claim: link orphan report to the authenticated user's account */}
+      {isLoggedIn && <ReportClaimHandler shareToken={shareToken} isOrphan={!report.project_id} />}
 
       {/* Page content */}
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 2rem' }}>
@@ -85,7 +117,7 @@ export default async function ReportPage({ params }: Props) {
           <ReportDepsTable report={report} />
         </div>
 
-        {/* Footer CTA */}
+        {/* Footer CTA — context-aware */}
         <div style={{
           marginTop: '3rem',
           borderTop: '1px solid rgba(255,255,255,0.1)',
@@ -96,33 +128,58 @@ export default async function ReportPage({ params }: Props) {
           gap: '1rem',
           textAlign: 'center',
         }}>
-          <p style={{ color: '#666666', fontSize: '0.875rem', fontFamily: 'JetBrains Mono, monospace' }}>
-            Scan your own project in 30 seconds
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-            <Link href="/login" style={{
-              padding: '0.75rem 1.5rem',
-              background: '#FFFFFF',
-              color: '#000000',
-              textDecoration: 'none',
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.8125rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}>
-              Get Started Free →
-            </Link>
-            <code style={{
-              padding: '0.75rem 1.5rem',
-              border: '1px solid rgba(255,255,255,0.2)',
-              color: '#888888',
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.8125rem',
-            }}>
-              npx depgraph-scanner check
-            </code>
-          </div>
+          {isLoggedIn ? (
+            // Already logged in — send to dashboard
+            <>
+              <p style={{ color: '#666666', fontSize: '0.875rem', fontFamily: 'JetBrains Mono, monospace' }}>
+                This report is saved to your account
+              </p>
+              <Link href="/dashboard" style={{
+                padding: '0.75rem 1.5rem',
+                background: '#FFFFFF',
+                color: '#000000',
+                textDecoration: 'none',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.8125rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}>
+                View Dashboard →
+              </Link>
+            </>
+          ) : (
+            // Not logged in — invite to sign in, report will be there
+            <>
+              <p style={{ color: '#666666', fontSize: '0.875rem', fontFamily: 'JetBrains Mono, monospace' }}>
+                Sign in to track this report in your dashboard
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                <Link href={`/login?callbackUrl=${callbackUrl}`} style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#FFFFFF',
+                  color: '#000000',
+                  textDecoration: 'none',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.8125rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}>
+                  Sign In to Save Report →
+                </Link>
+                <code style={{
+                  padding: '0.75rem 1.5rem',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: '#888888',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.8125rem',
+                }}>
+                  npx depgraph-scanner check
+                </code>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>
