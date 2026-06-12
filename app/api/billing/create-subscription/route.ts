@@ -59,8 +59,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       subscriptionId: subscription.id,
-      shortUrl:       subscription.shortUrl,  // hosted Razorpay checkout URL
-      checkoutUrl:    subscription.shortUrl,  // alias for client compatibility
+      razorpayKeyId:  process.env.RAZORPAY_KEY_ID,  // public key for client-side popup
+      shortUrl:       subscription.shortUrl,          // fallback hosted page
+      checkoutUrl:    subscription.shortUrl,
       plan,
     }, { status: 201 });
 

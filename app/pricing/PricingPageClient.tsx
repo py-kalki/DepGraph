@@ -5,6 +5,7 @@ import Link from 'next/link';
 import LandingNavbar from '@/components/landing/LandingNavbar';
 import FooterSection from '@/components/landing/FooterSection';
 import HoverCardEffect from '@/components/landing/HoverCardEffect';
+import { openRazorpayCheckout } from '@/lib/razorpay-checkout';
 
 // Crosshead corner accent — same as HeroSection
 const Crosshead = ({ style }: { style: React.CSSProperties }) => (
@@ -58,16 +59,43 @@ export default function PricingPageClient() {
         body: JSON.stringify({ plan: 'pro' }),
       });
       if (res.status === 401) { window.location.href = '/login?callbackUrl=/pricing'; return; }
-      const data = await res.json() as { shortUrl?: string; checkoutUrl?: string; error?: string };
-      const url = data.shortUrl ?? data.checkoutUrl;
-      if (url) {
-        window.location.href = url;
-      } else {
-        setError(data.error ?? 'Checkout unavailable. Please try again.');
+      const data = await res.json() as {
+        subscriptionId?: string;
+        razorpayKeyId?: string;
+        shortUrl?: string;
+        error?: string;
+      };
+
+      if (data.subscriptionId && data.razorpayKeyId) {
         setLoading(false);
+        // Open embedded Razorpay popup — no redirect to api.razorpay.com
+        await openRazorpayCheckout({
+          subscriptionId: data.subscriptionId,
+          razorpayKeyId:  data.razorpayKeyId,
+          name:           'DepGraph',
+          description:    'Pro Plan — ₹99/month',
+          onSuccess: async (response) => {
+            // Verify payment server-side
+            await fetch('/api/billing/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(response),
+            });
+            window.location.href = '/dashboard?upgraded=1';
+          },
+          onDismiss: () => setLoading(false),
+        });
+      } else {
+        // Fallback to hosted page if popup fails
+        const url = data.shortUrl;
+        if (url) { window.location.href = url; }
+        else {
+          setError(data.error ?? 'Checkout unavailable. Please try again.');
+          setLoading(false);
+        }
       }
-    } catch {
-      setError('Network error. Please try again.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Network error. Please try again.');
       setLoading(false);
     }
   };
