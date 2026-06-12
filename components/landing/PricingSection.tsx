@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 
 const PLANS = [
@@ -46,6 +47,26 @@ const PLANS = [
 ];
 
 export default function PricingSection() {
+  const [loading, setLoading] = useState(false);
+
+  const handleUpgrade = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/billing/create-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'pro' }),
+      });
+      if (res.status === 401) {
+        window.location.href = '/login?callbackUrl=/pricing';
+        return;
+      }
+      const data = await res.json() as { checkoutUrl?: string };
+      window.location.href = data.checkoutUrl ?? '/settings/billing';
+    } catch {
+      setLoading(false);
+    }
+  };
   return (
     <section
       id="pricing"
@@ -162,29 +183,49 @@ export default function PricingSection() {
                 ))}
               </div>
 
-              <Link
-                href={plan.ctaHref}
-                style={{
-                  display: 'block',
-                  textAlign: 'center',
-                  padding: '1rem',
-                  background: plan.highlighted ? '#FFFFFF' : 'transparent',
-                  color: plan.highlighted ? '#000000' : '#FFFFFF',
-                  border: '1px solid #FFFFFF',
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  fontSize: '0.9375rem',
-                  transition: 'background-color 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  if (!plan.highlighted) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  if (!plan.highlighted) e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                {plan.cta}
-              </Link>
+              {plan.plan === 'pro' ? (
+                <button
+                  onClick={handleUpgrade}
+                  disabled={loading}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'center',
+                    padding: '1rem',
+                    background: '#FFFFFF',
+                    color: '#000000',
+                    border: '1px solid #FFFFFF',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    fontSize: '0.9375rem',
+                    cursor: loading ? 'wait' : 'pointer',
+                    opacity: loading ? 0.7 : 1,
+                    transition: 'opacity 0.2s',
+                  }}
+                >
+                  {loading ? 'Redirecting…' : plan.cta}
+                </button>
+              ) : (
+                <Link
+                  href={plan.ctaHref}
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    padding: '1rem',
+                    background: 'transparent',
+                    color: '#FFFFFF',
+                    border: '1px solid #FFFFFF',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    fontSize: '0.9375rem',
+                    transition: 'background-color 0.2s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                >
+                  {plan.cta}
+                </Link>
+              )}
             </div>
           ))}
         </div>

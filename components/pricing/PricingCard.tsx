@@ -30,12 +30,38 @@ export default function PricingCard({
 }: PricingCardProps) {
   const [loading, setLoading] = useState(false);
 
-  const handleCta = () => {
-    if (ctaHref.startsWith('/')) {
+  const handleCta = async () => {
+    // Free plan — just navigate
+    if (plan === 'free') {
       window.location.href = ctaHref;
-    } else {
-      setLoading(true);
-      window.location.href = ctaHref;
+      return;
+    }
+
+    // Pro plan — must POST to billing API (GET returns 405)
+    setLoading(true);
+    try {
+      const res = await fetch('/api/billing/create-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan }),
+      });
+
+      if (res.status === 401) {
+        // Not logged in — send to login first
+        window.location.href = `/login?callbackUrl=/pricing`;
+        return;
+      }
+
+      const data = await res.json() as { checkoutUrl?: string; error?: string };
+
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        // Fallback — billing settings page
+        window.location.href = '/settings/billing';
+      }
+    } catch {
+      setLoading(false);
     }
   };
 
