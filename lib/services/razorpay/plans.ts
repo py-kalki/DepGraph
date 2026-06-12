@@ -9,11 +9,10 @@ import { getEnv } from '@/lib/env';
 
 /** Map plan names to Razorpay plan IDs (set via env or hardcoded test IDs) */
 export function getRazorpayPlanId(plan: 'pro'): string {
-  // In production, create plans in the Razorpay dashboard and set env vars.
-  // In development/test, use placeholder IDs.
-  const env = getEnv();
   if (plan === 'pro') {
-    return process.env.RAZORPAY_PRO_PLAN_ID ?? 'plan_pro_placeholder';
+    const planId = process.env.RAZORPAY_PLAN_ID_PRO ?? process.env.RAZORPAY_PRO_PLAN_ID;
+    if (!planId) throw new Error('RAZORPAY_PLAN_ID_PRO env var is not set');
+    return planId;
   }
   throw new Error(`Unknown plan: ${plan}`);
 }
