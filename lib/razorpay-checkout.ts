@@ -11,6 +11,7 @@ export interface RazorpayCheckoutOptions {
   name?: string;
   description?: string;
   prefill?: { name?: string; email?: string; contact?: string };
+  onLoading?: (loading: boolean) => void;  // fires while checkout.js loads
   onSuccess: (response: { razorpay_payment_id: string; razorpay_subscription_id: string; razorpay_signature: string }) => void;
   onDismiss?: () => void;
 }
@@ -36,7 +37,9 @@ function loadRazorpayScript(): Promise<void> {
 
 /** Open the Razorpay checkout popup for a subscription. */
 export async function openRazorpayCheckout(opts: RazorpayCheckoutOptions): Promise<void> {
+  opts.onLoading?.(true);
   await loadRazorpayScript();
+  opts.onLoading?.(false);
 
   const rzp = new window.Razorpay({
     key:             opts.razorpayKeyId,

@@ -6,6 +6,7 @@ import LandingNavbar from '@/components/landing/LandingNavbar';
 import FooterSection from '@/components/landing/FooterSection';
 import HoverCardEffect from '@/components/landing/HoverCardEffect';
 import { openRazorpayCheckout } from '@/lib/razorpay-checkout';
+import PaymentSuccessModal from '@/components/billing/PaymentSuccessModal';
 
 // Crosshead corner accent — same as HeroSection
 const Crosshead = ({ style }: { style: React.CSSProperties }) => (
@@ -47,7 +48,9 @@ const FAQS = [
 
 export default function PricingPageClient() {
   const [loading, setLoading] = useState(false);
+  const [scriptLoading, setScriptLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successPaymentId, setSuccessPaymentId] = useState<string | null>(null);
 
   const handleUpgrade = async () => {
     setLoading(true);
@@ -68,31 +71,27 @@ export default function PricingPageClient() {
 
       if (data.subscriptionId && data.razorpayKeyId) {
         setLoading(false);
-        // Open embedded Razorpay popup — no redirect to api.razorpay.com
         await openRazorpayCheckout({
           subscriptionId: data.subscriptionId,
           razorpayKeyId:  data.razorpayKeyId,
           name:           'DepGraph',
           description:    'Pro Plan — ₹99/month',
+          onLoading: (l) => setScriptLoading(l),
           onSuccess: async (response) => {
-            // Verify payment server-side
             await fetch('/api/billing/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(response),
             });
-            window.location.href = '/dashboard?upgraded=1';
+            setSuccessPaymentId(response.razorpay_payment_id);
           },
           onDismiss: () => setLoading(false),
         });
+      } else if (data.shortUrl) {
+        window.location.href = data.shortUrl;
       } else {
-        // Fallback to hosted page if popup fails
-        const url = data.shortUrl;
-        if (url) { window.location.href = url; }
-        else {
-          setError(data.error ?? 'Checkout unavailable. Please try again.');
-          setLoading(false);
-        }
+        setError(data.error ?? 'Checkout unavailable. Please try again.');
+        setLoading(false);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Network error. Please try again.');
@@ -104,6 +103,34 @@ export default function PricingPageClient() {
     <div style={{ minHeight: '100vh', background: '#000000', color: '#FFFFFF', fontFamily: 'JetBrains Mono, monospace' }}>
       <HoverCardEffect />
       <LandingNavbar />
+
+      {/* Script loading overlay */}
+      {scriptLoading && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: '1rem', fontFamily: 'JetBrains Mono, monospace',
+        }}>
+          <div style={{
+            width: '40px', height: '40px',
+            border: '2px solid rgba(255,255,255,0.15)',
+            borderTopColor: '#FFFFFF',
+            borderRadius: '50%',
+            animation: 'spin 0.7s linear infinite',
+          }} />
+          <p style={{ color: '#888888', fontSize: '0.8125rem' }}>Opening secure checkout…</p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+        </div>
+      )}
+
+      {/* Success modal */}
+      {successPaymentId && (
+        <PaymentSuccessModal
+          paymentId={successPaymentId}
+          onClose={() => { setSuccessPaymentId(null); window.location.href = '/dashboard'; }}
+        />
+      )}
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ position: 'relative', padding: '8rem 1.5rem 5rem', overflow: 'hidden' }}>
