@@ -59,12 +59,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       subscriptionId: subscription.id,
-      shortUrl:       subscription.shortUrl,
+      shortUrl:       subscription.shortUrl,  // hosted Razorpay checkout URL
+      checkoutUrl:    subscription.shortUrl,  // alias for client compatibility
       plan,
     }, { status: 201 });
 
   } catch (err) {
-    console.error('[POST /api/billing/create-subscription]', err);
-    return NextResponse.json({ error: 'Failed to create subscription' }, { status: 500 });
+    // Log the full Razorpay error so we can debug in Vercel logs
+    const errMsg = err instanceof Error ? err.message : JSON.stringify(err);
+    console.error('[POST /api/billing/create-subscription] Razorpay error:', errMsg);
+    return NextResponse.json({ error: errMsg || 'Failed to create subscription' }, { status: 500 });
   }
 }

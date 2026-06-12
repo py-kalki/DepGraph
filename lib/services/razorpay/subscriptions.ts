@@ -26,9 +26,10 @@ export async function createRazorpaySubscription(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const subscription = await (razorpay.subscriptions as any).create({
     plan_id:     planId,
-    customer_id: razorpayCustomerId,
     total_count: totalCount,
     quantity:    1,
+    // Note: customer_id is NOT a valid Razorpay subscription param at creation.
+    // Customer is identified via the hosted checkout flow.
   });
 
   return {

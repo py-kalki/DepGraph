@@ -9,20 +9,27 @@ interface UpgradeModalProps {
 
 export default function UpgradeModal({ currentPlan, onClose }: UpgradeModalProps) {
   const [loading, setLoading] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleUpgrade = async (plan: 'pro') => {
     setLoading(plan);
+    setError(null);
     try {
       const res  = await fetch('/api/billing/create-subscription', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ plan }),
       });
-      const data = await res.json() as { shortUrl?: string };
-      if (data.shortUrl) {
-        window.location.href = data.shortUrl;
+      const data = await res.json() as { shortUrl?: string; checkoutUrl?: string; error?: string };
+      const redirectUrl = data.shortUrl ?? data.checkoutUrl;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        setError(data.error ?? 'Checkout unavailable. Please try again.');
+        setLoading(null);
       }
     } catch {
+      setError('Network error. Please try again.');
       setLoading(null);
     }
   };
@@ -47,6 +54,12 @@ export default function UpgradeModal({ currentPlan, onClose }: UpgradeModalProps
             {loading === 'pro' ? 'Redirecting…' : 'Upgrade to Pro — ₹99/month'}
           </button>
         </div>
+
+        {error && (
+          <p style={{ color: '#E24B4A', fontSize: '0.8125rem', marginBottom: '1rem', fontFamily: 'JetBrains Mono, monospace' }}>
+            ✗ {error}
+          </p>
+        )}
 
         <p className="modal-footnote">Secure checkout powered by Razorpay. Cancel anytime.</p>
       </div>
