@@ -3,58 +3,60 @@ import FooterSection from '@/components/landing/FooterSection';
 
 export const metadata = {
   title: 'Refund Policy — DepGraph',
-  description: 'Our refund policy for subscription plans.',
+  description: 'DepGraph refund and cancellation policy.',
 };
 
 export default function RefundPage() {
   return (
-    <>
+    <div style={{ background: '#000000', color: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LandingNavbar />
       
-      <main id="main-content" style={{ position: 'relative', overflow: 'hidden', paddingBottom: '8rem' }}>
-        <div className="bg-radial-glow"></div>
-        
-        <section style={{ textAlign: 'center', paddingTop: '6rem', paddingBottom: '3rem', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>
-            Refund Policy
-          </h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Last Updated: June 1, 2026</p>
-        </section>
+      <main style={{ flex: 1, padding: '8rem 1.5rem', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+        <h1 style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.05em', marginBottom: '1rem', lineHeight: 1.05 }}>
+          Refund Policy
+        </h1>
+        <p style={{ color: '#888888', fontSize: '1rem', marginBottom: '4rem', fontFamily: 'JetBrains Mono, monospace' }}>Last Updated: June 1, 2026</p>
 
-        <div className="container docs-prose glass-panel" style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem' }}>
+        <div style={{ fontSize: '1rem', color: '#888888', lineHeight: 1.7, display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
           
           <p>
-            At DepGraph, we want to ensure you are fully satisfied with our dependency intelligence platform. This policy outlines the conditions under which refunds are provided.
+            At DepGraph, we strive to ensure you are fully satisfied with our service. This policy outlines when refunds are issued.
           </p>
 
-          <h2>1. Monthly Subscriptions</h2>
-          <p>
-            All monthly subscriptions are billed in advance on a month-to-month basis and are <strong>non-refundable</strong>. There are no refunds or credits for partial months of service, upgrade/downgrade refunds, or refunds for months unused with an open account.
-          </p>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '1rem' }}>1. Subscription Cancellations</h2>
+            <p>
+              You can cancel your subscription at any time from your dashboard. Once cancelled, you will continue to have access to your paid features until the end of your current billing cycle. 
+            </p>
+          </div>
 
-          <h2>2. Annual Subscriptions</h2>
-          <p>
-            For annual plans, we offer a <strong>14-day money-back guarantee</strong>. If you are dissatisfied with the service within the first 14 days of your initial annual subscription, please contact us for a full refund. After 14 days, annual subscriptions are non-refundable.
-          </p>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '1rem' }}>2. Refund Eligibility</h2>
+            <p>Refunds are strictly issued under the following circumstances:</p>
+            <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li><strong style={{ color: '#FFFFFF' }}>First 7 Days:</strong> If you are unsatisfied with your first subscription payment, contact us within 7 days for a full refund.</li>
+              <li><strong style={{ color: '#FFFFFF' }}>Accidental Renewals:</strong> If you forgot to cancel before the billing cycle renewed, contact us within 48 hours of the charge for a refund.</li>
+            </ul>
+          </div>
 
-          <h2>3. Service Disruptions</h2>
-          <p>
-            In the highly unlikely event of a prolonged service outage (defined as continuous downtime exceeding 48 hours), DepGraph may, at its sole discretion, issue prorated service credits to affected accounts. Cash refunds will not be provided for service disruptions.
-          </p>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '1rem' }}>3. Non-refundable Items</h2>
+            <p>
+              We do not issue refunds for partial months of service if you cancel in the middle of a billing cycle (unless it falls under the 48-hour accidental renewal window). Enterprise contracts are subject to the specific terms outlined in their respective agreements.
+            </p>
+          </div>
 
-          <h2>4. Cancellations</h2>
-          <p>
-            You may cancel your subscription at any time via your billing dashboard. Upon cancellation, your service will remain active until the end of your current paid billing period. You will not be charged again, but no refunds will be issued for the remainder of the period.
-          </p>
+          <div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '1rem' }}>4. How to Request a Refund</h2>
+            <p>
+              Please send an email to <code style={{ color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', padding: '0.1rem 0.3rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85em' }}>support@depgraph.vedanshh.dev</code> with the email address associated with your account and the reason for the request. We typically process requests within 1-2 business days.
+            </p>
+          </div>
 
-          <h2>5. How to Request a Refund</h2>
-          <p>
-            If you believe you qualify for a refund under this policy (e.g., within the 14-day window for annual plans), please email us at <code>vedanshh.dev@gmail.com</code> with your account details and the reason for your request.
-          </p>
         </div>
       </main>
 
       <FooterSection />
-    </>
+    </div>
   );
 }
