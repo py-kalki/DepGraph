@@ -7,7 +7,7 @@ import { SessionProvider } from '@/components/auth/SessionProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://depgraph.com'),
+  metadataBase: new URL('https://depgraph.vedanshh.dev'),
   title: 'DepGraph — Dependency Intelligence',
   description:
     'Real-time health scores, abandonment risk forecasts, and supply-chain integrity signals for every open-source library in your project.',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'DepGraph — Dependency Intelligence',
     description: 'Real-time health scores, abandonment risk forecasts, and supply-chain integrity signals.',
-    url: 'https://depgraph.com',
+    url: 'https://depgraph.vedanshh.dev',
     siteName: 'DepGraph',
     locale: 'en_US',
     type: 'website',

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'DepGraph — Dependency Intelligence Platform',
     description: 'Real-time health scores for every npm package. Predict failures before production.',
     type: 'website',
-    url: 'https://depgraph.com',
+    url: 'https://depgraph.vedanshh.dev',
   },
   twitter: {
     card: 'summary_large_image',

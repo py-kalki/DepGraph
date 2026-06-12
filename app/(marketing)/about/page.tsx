@@ -9,7 +9,7 @@ export const metadata = {
     title: 'About Us — DepGraph',
     description: 'The story and mission behind DepGraph. We build tools for the paranoid to solve the software supply chain crisis.',
     type: 'website',
-    url: 'https://depgraph.com/about',
+    url: 'https://depgraph.vedanshh.dev/about',
   },
   twitter: {
     card: 'summary_large_image',
