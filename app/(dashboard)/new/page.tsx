@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PackagePlus, Loader2, CheckCircle } from 'lucide-react';
+import { PackagePlus, Loader2, CheckCircle, ArrowLeft } from 'lucide-react';
 import HoverCardEffect from '@/components/landing/HoverCardEffect';
 
 type Phase = 'idle' | 'creating' | 'scanning' | 'done' | 'error';
@@ -75,6 +75,32 @@ export default function NewProjectPage() {
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', paddingTop: '2rem' }}>
       <HoverCardEffect />
+
+      {/* Back button */}
+      <button
+        onClick={() => router.back()}
+        type="button"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          marginBottom: '1.5rem',
+          background: 'transparent',
+          border: 'none',
+          color: '#888888',
+          fontFamily: 'JetBrains Mono, monospace',
+          fontSize: '0.8125rem',
+          cursor: 'pointer',
+          padding: '0.25rem 0',
+          transition: 'color 0.15s',
+        }}
+        onMouseOver={(e) => { e.currentTarget.style.color = '#FFFFFF' }}
+        onMouseOut={(e) => { e.currentTarget.style.color = '#888888' }}
+      >
+        <ArrowLeft size={14} />
+        Back
+      </button>
+
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>Add New Project</h1>
         <p style={{ color: '#888888', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem' }}>
