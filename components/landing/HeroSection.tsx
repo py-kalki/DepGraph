@@ -26,7 +26,7 @@ export default function HeroSection() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem', // margin from the screen
+        padding: 'clamp(1rem, 5vw, 2rem)', // margin from the screen
         overflow: 'hidden',
         background: '#000000',
       }}
@@ -91,11 +91,11 @@ export default function HeroSection() {
         <Crosshead style={{ bottom: '-7.5px', right: '-7.5px' }} />
 
         {/* Inner Content */}
-        <div style={{ maxWidth: '900px', textAlign: 'center', padding: '2rem' }}>
+        <div style={{ maxWidth: '900px', textAlign: 'center', padding: 'clamp(1rem, 5vw, 2rem)' }}>
           <h1
             id="hero-headline"
             style={{
-              fontSize: 'clamp(3rem, 6vw, 5rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
               fontWeight: 800,
               lineHeight: 1.05,
               letterSpacing: '-0.05em',

@@ -4,7 +4,7 @@ export default function CTASection() {
   return (
     <section
       style={{
-        padding: '8rem 1.5rem',
+        padding: 'clamp(3rem, 6vw, 8rem) 1.25rem',
         background: '#0D0D0D',
         borderTop: '1px solid rgba(255,255,255,0.06)',
         position: 'relative',
@@ -62,7 +62,7 @@ export default function CTASection() {
             color: '#6C63FF',
             letterSpacing: '0.06em',
             textTransform: 'uppercase',
-            marginBottom: '2rem',
+            marginBottom: '1rem',
           }}
         >
           Get started today

@@ -71,7 +71,7 @@ export default function PricingSection() {
     <section
       id="pricing"
       style={{
-        padding: 'clamp(4rem, 8vw, 8rem) 1.25rem',
+        padding: 'clamp(3rem, 6vw, 8rem) 1.25rem',
         background: '#000000',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}

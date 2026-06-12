@@ -32,7 +32,7 @@ export default function LandingNavbar() {
     <>
       <header
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+          position: 'sticky', top: 0, zIndex: 1000,
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
           background: scrolled ? 'rgba(0,0,0,0.9)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',

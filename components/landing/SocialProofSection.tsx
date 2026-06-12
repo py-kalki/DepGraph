@@ -32,7 +32,7 @@ export default function SocialProofSection() {
   return (
     <section
       style={{
-        padding: '6rem 1.5rem',
+        padding: 'clamp(3rem, 6vw, 6rem) 1.25rem',
         borderTop: '1px solid rgba(255,255,255,0.15)',
         borderBottom: '1px solid rgba(255,255,255,0.15)',
         background: '#000000',
@@ -43,7 +43,7 @@ export default function SocialProofSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '2rem',
             marginBottom: '6rem',
           }}
@@ -53,7 +53,7 @@ export default function SocialProofSection() {
               <div
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                  fontSize: 'clamp(2rem, 6vw, 3.5rem)',
                   fontWeight: 800,
                   color: '#FFFFFF',
                   letterSpacing: '-0.05em',
