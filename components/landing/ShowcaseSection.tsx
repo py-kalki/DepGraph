@@ -25,7 +25,7 @@ export default function ShowcaseSection() {
     <section
       id="showcase"
       style={{
-        padding: '7rem 1.5rem',
+        padding: 'clamp(4rem, 8vw, 7rem) 1.25rem',
         background: '#0D0D0D',
         borderTop: '1px solid rgba(255,255,255,0.06)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -64,14 +64,15 @@ export default function ShowcaseSection() {
           </h2>
         </div>
 
-        {/* Fake Dashboard */}
+        {/* Fake Dashboard — horizontal scroll on mobile */}
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', borderRadius: '20px', boxShadow: '0 40px 100px rgba(0,0,0,0.6)' }}>
         <div
           style={{
             background: '#111111',
             border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '20px',
             overflow: 'hidden',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.6)',
+            minWidth: '680px',
           }}
         >
           {/* Dashboard top bar */}
@@ -237,6 +238,7 @@ export default function ShowcaseSection() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>

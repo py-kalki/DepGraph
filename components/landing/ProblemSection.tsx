@@ -33,8 +33,8 @@ export default function ProblemSection() {
     <section
       id="problem"
       style={{
-        padding: '8rem 1.5rem',
-        background: '#000000', // Pure black
+        padding: 'clamp(4rem, 8vw, 8rem) 1.25rem',
+        background: '#000000',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
     >
@@ -77,7 +77,7 @@ export default function ProblemSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
             gap: '1.5rem',
             alignItems: 'stretch',
           }}

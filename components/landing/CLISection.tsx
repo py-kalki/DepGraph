@@ -62,7 +62,7 @@ export default function CLISection() {
     <section
       id="cli"
       style={{
-        padding: '8rem 1.5rem',
+        padding: 'clamp(4rem, 8vw, 8rem) 1.25rem',
         background: '#000000',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
@@ -107,7 +107,7 @@ export default function CLISection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '1px',
             background: 'rgba(255,255,255,0.15)',
             borderTop: '1px solid rgba(255,255,255,0.15)',

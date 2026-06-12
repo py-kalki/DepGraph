@@ -71,7 +71,7 @@ export default function PricingSection() {
     <section
       id="pricing"
       style={{
-        padding: '8rem 1.5rem',
+        padding: 'clamp(4rem, 8vw, 8rem) 1.25rem',
         background: '#000000',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
@@ -114,7 +114,7 @@ export default function PricingSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
             gap: '1px',
             background: 'rgba(255,255,255,0.15)',
             borderTop: '1px solid rgba(255,255,255,0.15)',
@@ -129,7 +129,7 @@ export default function PricingSection() {
               className="hover-card"
               style={{
                 background: plan.highlighted ? '#0A0A0A' : '#000000',
-                padding: '3rem',
+                padding: 'clamp(1.5rem, 5vw, 3rem)',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'relative',
