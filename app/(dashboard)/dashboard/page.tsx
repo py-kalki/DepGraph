@@ -29,9 +29,14 @@ export const metadata: Metadata = {
   description: 'View your project dependency health scores and risk breakdown.',
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ project?: string }>;
+}) {
   const session = await getServerSession(authOptions);
   const userId = session!.userId;
+  const { project: projectIdParam } = await searchParams;
 
   const projects = await getUserProjects(userId);
 
@@ -48,8 +53,8 @@ export default async function DashboardPage() {
     );
   }
 
-  // Use the first (most recent) project
-  const project = projects[0];
+  // Use the project from ?project= param, else the most recent
+  const project = projects.find(p => p.id === projectIdParam) ?? projects[0];
   const scans = await getProjectScanHistory(project.id, 1);
   const latestScan = scans[0] ?? null;
 
