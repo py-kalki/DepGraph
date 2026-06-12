@@ -37,7 +37,7 @@ export default async function DependencyDetailPage(props: Props) {
       
       {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
-        <Link href="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#888888', textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem', marginBottom: '1rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = '#FFFFFF'} onMouseOut={(e) => e.currentTarget.style.color = '#888888'}>
+        <Link href="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#888888', textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem', marginBottom: '1rem', transition: 'color 0.2s' }}>
           <ArrowLeft size={16} /> Back to Dashboard
         </Link>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

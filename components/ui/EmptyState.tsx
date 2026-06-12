@@ -59,8 +59,6 @@ export function EmptyState({ icon, IconComponent, title, description, actionLabe
               cursor: 'pointer',
               transition: 'opacity 0.2s',
             }}
-            onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
-            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
           >
             {actionLabel}
           </button>
@@ -81,8 +79,6 @@ export function EmptyState({ icon, IconComponent, title, description, actionLabe
               letterSpacing: '0.05em',
               transition: 'opacity 0.2s',
             }}
-            onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
-            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
           >
             {actionLabel}
           </a>

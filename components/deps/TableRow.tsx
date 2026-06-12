@@ -30,7 +30,7 @@ export function TableRow({ dep }: Props) {
     <tr>
       <td>
         <span className="mono-cell" style={{ fontWeight: 500 }}>
-          <Link href={`/dependency/${encodeURIComponent(dep.name)}`} style={{ color: 'inherit', textDecoration: 'none' }} onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'} onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}>
+          <Link href={`/dependency/${encodeURIComponent(dep.name)}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
             {dep.name}
           </Link>
           {dep.version && (
