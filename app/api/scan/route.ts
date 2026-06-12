@@ -20,6 +20,8 @@ import { CacheKeys } from '@/lib/cache/keys';
 import { upsertPackageScore } from '@/lib/db/queries/packages';
 import { insertScoreHistory } from '@/lib/db/queries/history';
 import { createScanReport } from '@/lib/db/queries/scans';
+import { getUserByApiKey } from '@/lib/db/queries/apiKeys';
+import { getUserProjects, createProject, updateProjectScore } from '@/lib/db/queries/projects';
 import { trackFirstScan } from '@/lib/analytics/events';
 import type { ScanRequest, ScanReport, PackageScore, RawSignals } from '@/lib/types';
 import { getEnv } from '@/lib/env';
@@ -28,13 +30,18 @@ import { getEnv } from '@/lib/env';
 const MAX_PACKAGES = 500;
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  // Week 1: Basic API key authentication
-  // Week 3 will add NextAuth session support
-  const apiKey = request.headers.get('x-api-key');
-  if (!apiKey) {
-    // Unauthenticated scans allowed in Week 1 for testing
-    // TODO Week 3: enforce auth, check against user's API key
-    console.warn('[API /scan] Unauthenticated scan request');
+  // Resolve user from API key (optional — anonymous scans still allowed)
+  const rawKey = request.headers.get('x-api-key') ?? request.headers.get('authorization')?.replace('Bearer ', '');
+  let userId: string | null = null;
+
+  if (rawKey) {
+    const keyResult = await getUserByApiKey(rawKey);
+    if (keyResult) {
+      userId = keyResult.userId;
+    } else {
+      // Invalid key provided — reject rather than silently ignoring
+      return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
+    }
   }
 
   let body: ScanRequest;
@@ -45,6 +52,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   const { packages, lockfileHash } = body;
+  const projectName: string = (body as { projectName?: string }).projectName ?? 'CLI Project';
 
   if (!Array.isArray(packages) || packages.length === 0) {
     return NextResponse.json(
@@ -91,7 +99,29 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const counts = countByRiskLevel(packageScores);
     const env = getEnv();
 
-    // 4. Persist scan report to DB
+    // 4. Resolve project — find or create a CLI project for this user
+    let resolvedProjectId: string | null = null;
+    if (userId) {
+      try {
+        const userProjects = await getUserProjects(userId);
+        // Find existing CLI project or use first project
+        const cliProject = userProjects.find(p => p.name === projectName) ?? userProjects[0] ?? null;
+        if (cliProject) {
+          resolvedProjectId = cliProject.id;
+          // Update project score
+          await updateProjectScore(cliProject.id, overallScore);
+        } else {
+          // Create a new project for this user
+          const newProject = await createProject(userId, projectName, null);
+          resolvedProjectId = newProject.id;
+        }
+      } catch (projectErr) {
+        console.warn('[API /scan] Failed to resolve project:', projectErr);
+        // Non-fatal — scan still saves without project link
+      }
+    }
+
+    // 5. Persist scan report to DB (linked to project if authenticated)
     const { id, shareToken } = await createScanReport({
       packages: packageScores,
       overallScore,
@@ -101,11 +131,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       mediumCount: counts.medium,
       lowCount: counts.low,
       healthyCount: counts.healthy,
-      projectId: null, // Week 4: link to saved project
+      projectId: resolvedProjectId,
     });
 
-    // Track analytics (use apiKey or lockfileHash as distinctId if unauthenticated)
-    const distinctId = apiKey ?? lockfileHash ?? 'anonymous';
+    // Track analytics
+    const distinctId = userId ?? lockfileHash ?? 'anonymous';
     trackFirstScan(distinctId, {
       packageCount: packageScores.length,
       overallScore,
@@ -123,10 +153,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       healthyCount: counts.healthy,
       packages: packageScores,
       createdAt: new Date(),
-      projectId: null,
+      projectId: resolvedProjectId,
     };
 
-    // 5. Cache full scan result (1hr TTL per PRD)
+    // 6. Cache full scan result (1hr TTL per PRD)
     if (lockfileHash) {
       cacheSet(CacheKeys.scanReport(lockfileHash), report, TTL.SCAN_REPORT).catch(() => {});
     }
@@ -141,6 +171,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
 
 /**
  * Score a single package — parses "name@version" format from CLI.
