@@ -49,7 +49,7 @@ export default function ComparisonSection() {
     <section
       id="comparison"
       style={{
-        padding: '8rem 1.5rem',
+        padding: 'clamp(3rem, 6vw, 8rem) 1.25rem',
         background: '#000000',
         borderTop: '1px solid rgba(255,255,255,0.1)',
       }}
@@ -85,11 +85,13 @@ export default function ComparisonSection() {
           </h2>
         </div>
 
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <div
           style={{
             background: '#000000',
             border: '1px solid rgba(255,255,255,0.15)',
             borderBottom: 'none', // Will be handled by last row
+            minWidth: '600px',
           }}
         >
           {/* Header row */}
@@ -178,6 +180,7 @@ export default function ComparisonSection() {
               ))}
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>
