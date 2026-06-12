@@ -3,7 +3,7 @@ import { getPackageScore } from '@/lib/db/queries/packages';
 import { ScoreGauge } from '@/components/dashboard/ScoreGauge';
 import HoverCardEffect from '@/components/landing/HoverCardEffect';
 import Link from 'next/link';
-import { ArrowLeft, GitBranch, Github, TrendingDown, Users, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, GitBranch, TrendingDown, Users } from 'lucide-react';
 
 interface Props {
   params: Promise<{ name: string }>;
@@ -75,19 +75,19 @@ export default async function DependencyDetailPage(props: Props) {
         <div className="card hover-card" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', padding: '2rem' }}>
           <div>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6875rem', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Maintenance</span>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round(scoreData.maintenance_score * 100)}%</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round((scoreData.maintenance_score ?? 0) * 100)}%</div>
           </div>
           <div>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6875rem', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bus Factor</span>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round(scoreData.bus_factor_score * 100)}%</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round((scoreData.bus_factor_score ?? 0) * 100)}%</div>
           </div>
           <div>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6875rem', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Issue Health</span>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round(scoreData.issue_health_score * 100)}%</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: '#FFFFFF', marginTop: '0.25rem' }}>{Math.round((scoreData.issue_health_score ?? 0) * 100)}%</div>
           </div>
           <div>
             <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6875rem', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Vulnerabilities</span>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: scoreData.vulnerability_score < 1 ? '#E24B4A' : '#1D9E75', marginTop: '0.25rem' }}>{Math.round(scoreData.vulnerability_score * 100)}%</div>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.5rem', fontWeight: 700, color: (scoreData.vulnerability_score ?? 0) < 1 ? '#E24B4A' : '#1D9E75', marginTop: '0.25rem' }}>{Math.round((scoreData.vulnerability_score ?? 0) * 100)}%</div>
           </div>
         </div>
       </div>
