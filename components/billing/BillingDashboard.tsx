@@ -17,7 +17,7 @@ export default function BillingDashboard({ plan, subscription, invoices }: Billi
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showCancel,  setShowCancel]  = useState(false);
 
-  const canUpgrade = plan === 'free' || plan === 'pro';
+  const canUpgrade = plan === 'free';
   const canCancel  = plan !== 'free' && subscription?.status === 'active';
 
   return (
