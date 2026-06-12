@@ -6,10 +6,11 @@ import Link from 'next/link';
 import { ArrowLeft, GitBranch, Github, TrendingDown, Users, AlertTriangle } from 'lucide-react';
 
 interface Props {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }
 
-export default async function DependencyDetailPage({ params }: Props) {
+export default async function DependencyDetailPage(props: Props) {
+  const params = await props.params;
   const pkgName = decodeURIComponent(params.name);
   const scoreData = await getPackageScore(pkgName, 'npm');
 
