@@ -14,33 +14,35 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <>
       <LandingNavbar />
       
-      <main id="main-content" style={{ position: 'relative', overflow: 'hidden' }}>
-        <div className="bg-radial-glow"></div>
-        
-        <div className="docs-layout">
+      <main id="main-content" style={{ background: '#000000', minHeight: '100vh', paddingTop: '64px' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
           {/* Sidebar */}
-          <aside className="docs-sidebar">
-            <div className="docs-sidebar-group">
-              <h4>Getting Started</h4>
-              <nav className="docs-sidebar-links">
-                <Link href="/docs" className={`docs-sidebar-link ${isCurrent('/docs') ? 'active' : ''}`}>Overview</Link>
-                <Link href="/docs/cli" className={`docs-sidebar-link ${isCurrent('/docs/cli') ? 'active' : ''}`}>CLI Guide</Link>
-                <Link href="/docs/action" className={`docs-sidebar-link ${isCurrent('/docs/action') ? 'active' : ''}`}>GitHub Action</Link>
+          <aside style={{ width: '260px', borderRight: '1px solid rgba(255,255,255,0.15)', padding: '3rem 1.5rem', flexShrink: 0 }}>
+            <div style={{ marginBottom: '2.5rem' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#888888', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>
+                Getting Started
+              </div>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <Link href="/docs" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs') ? 600 : 500, color: isCurrent('/docs') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>Overview</Link>
+                <Link href="/docs/cli" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs/cli') ? 600 : 500, color: isCurrent('/docs/cli') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>CLI Guide</Link>
+                <Link href="/docs/action" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs/action') ? 600 : 500, color: isCurrent('/docs/action') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>GitHub Action</Link>
               </nav>
             </div>
             
-            <div className="docs-sidebar-group">
-              <h4>Core Platform</h4>
-              <nav className="docs-sidebar-links">
-                <Link href="/docs/api" className={`docs-sidebar-link ${isCurrent('/docs/api') ? 'active' : ''}`}>API Reference</Link>
-                <Link href="/docs/architecture" className={`docs-sidebar-link ${isCurrent('/docs/architecture') ? 'active' : ''}`}>Architecture</Link>
-                <Link href="/docs/billing" className={`docs-sidebar-link ${isCurrent('/docs/billing') ? 'active' : ''}`}>Billing & Plans</Link>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#888888', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>
+                Core Platform
+              </div>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <Link href="/docs/api" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs/api') ? 600 : 500, color: isCurrent('/docs/api') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>API Reference</Link>
+                <Link href="/docs/architecture" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs/architecture') ? 600 : 500, color: isCurrent('/docs/architecture') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>Architecture</Link>
+                <Link href="/docs/billing" style={{ fontSize: '0.875rem', fontWeight: isCurrent('/docs/billing') ? 600 : 500, color: isCurrent('/docs/billing') ? '#FFFFFF' : '#888888', textDecoration: 'none' }}>Billing & Plans</Link>
               </nav>
             </div>
           </aside>
 
           {/* Main Content Area */}
-          <article className="docs-content docs-prose glass-panel" style={{ padding: '3rem' }}>
+          <article style={{ flex: 1, padding: '4rem 4rem 8rem', maxWidth: '900px' }}>
             {children}
           </article>
         </div>

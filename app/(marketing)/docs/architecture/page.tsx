@@ -1,36 +1,71 @@
+import CodeBlock from '@/components/docs/CodeBlock';
+
 export const metadata = {
   title: 'Architecture Overview — DepGraph Docs',
-  description: 'A deep dive into DepGraph\'s technology stack and data flow.',
+  description: "A deep dive into DepGraph's technology stack and data flow.",
 };
 
-export default function ArchitectureDocs() {
+const H1 = ({ children }: { children: React.ReactNode }) => (
+  <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.05em', color: '#FFFFFF', marginBottom: '1.5rem', lineHeight: 1.05 }}>{children}</h1>
+);
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h2 style={{ fontSize: '1.375rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#FFFFFF', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '0.875rem', marginTop: '3.5rem', marginBottom: '1.5rem' }}>{children}</h2>
+);
+const P = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: '1rem', color: '#888888', lineHeight: 1.7, marginBottom: '1rem' }}>{children}</p>
+);
+const Code = ({ children }: { children: React.ReactNode }) => (
+  <code style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem', background: 'rgba(255,255,255,0.06)', padding: '0.15rem 0.4rem', color: '#FFFFFF' }}>{children}</code>
+);
+const Table = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>{children}</table>
+  </div>
+);
+const Th = ({ children }: { children: React.ReactNode }) => (
+  <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#888888', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>{children}</th>
+);
+const Td = ({ children }: { children: React.ReactNode }) => (
+  <td style={{ padding: '0.75rem 1rem', color: '#888888', borderBottom: '1px solid rgba(255,255,255,0.07)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem' }}>{children}</td>
+);
+
+const STACK = [
+  { layer: 'Frontend', tech: 'Next.js 14 (App Router)' },
+  { layer: 'Database', tech: 'PostgreSQL (Supabase)' },
+  { layer: 'Cache', tech: 'Redis (Upstash)' },
+  { layer: 'Auth', tech: 'NextAuth.js + GitHub OAuth' },
+  { layer: 'Hosting', tech: 'Vercel' },
+  { layer: 'Payments', tech: 'Razorpay' },
+  { layer: 'Email', tech: 'Resend' },
+];
+
+const CACHE = [
+  { data: 'Package score', ttl: '24h', key: 'pkg:score:npm:{name}' },
+  { data: 'GitHub signals', ttl: '6h', key: 'github:repo:{owner}:{repo}' },
+  { data: 'npm metadata', ttl: '12h', key: 'npm:meta:{name}' },
+  { data: 'OSV data', ttl: '24h', key: 'osv:npm:{name}' },
+  { data: 'Full scan report', ttl: '1h', key: 'scan:report:{lockfileHash}' },
+];
+
+export default async function ArchitectureDocs() {
   return (
-    <>
-      <h1>Architecture Overview</h1>
-      
-      <h2>Stack</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Layer</th>
-            <th>Technology</th>
-          </tr>
-        </thead>
+    <div style={{ color: '#FFFFFF' }}>
+      <H1>Architecture Overview</H1>
+      <P>A technical deep-dive into DepGraph's stack, data flow, and infrastructure decisions.</P>
+
+      <H2>Tech Stack</H2>
+      <Table>
+        <thead><tr><Th>Layer</Th><Th>Technology</Th></tr></thead>
         <tbody>
-          <tr><td>Frontend</td><td>Next.js 14 (App Router)</td></tr>
-          <tr><td>Database</td><td>PostgreSQL (Supabase)</td></tr>
-          <tr><td>Cache</td><td>Redis (Upstash)</td></tr>
-          <tr><td>Auth</td><td>NextAuth.js + GitHub OAuth</td></tr>
-          <tr><td>Hosting</td><td>Vercel</td></tr>
-          <tr><td>Payments</td><td>Razorpay</td></tr>
-          <tr><td>Email</td><td>Resend</td></tr>
+          {STACK.map((s) => (
+            <tr key={s.layer}><Td>{s.layer}</Td><Td>{s.tech}</Td></tr>
+          ))}
         </tbody>
-      </table>
+      </Table>
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-      <h2>Data Flow</h2>
-      <pre><code>{`User: npx depgraph check
+      <H2>Data Flow</H2>
+      <P>From a single CLI command to a fully scored report:</P>
+      <CodeBlock lang="bash" code={`User: npx depgraph check
          │
          ▼
 CLI reads package.json / package-lock.json
@@ -40,11 +75,11 @@ POST /api/scan  ← Auth: API key or session
          │
          ▼
 Check Redis cache (24hr TTL per package)
-   HIT  → return cached scores
+   HIT  → return cached scores instantly
    MISS → fetch signals in parallel:
-           GitHub API (commits, contributors, issues)
+           GitHub API   (commits, contributors, issues)
            npm registry (downloads, metadata)
-           OSV.dev (CVE data)
+           OSV.dev      (CVE data)
          │
          ▼
 Score engine computes health score (0–100)
@@ -53,43 +88,48 @@ Score engine computes health score (0–100)
 Store in PostgreSQL + Redis
          │
          ▼
-Return scored report → CLI (terminal output) or Dashboard (web)`}</code></pre>
+Return scored report
+  → CLI       (terminal output)
+  → Dashboard (web UI)`} />
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-      <h2>Caching Strategy</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>TTL</th>
-            <th>Key pattern</th>
-          </tr>
-        </thead>
+      <H2>Caching Strategy</H2>
+      <P>All upstream signals are aggressively cached to stay within GitHub API rate limits and minimise latency.</P>
+      <Table>
+        <thead><tr><Th>Data</Th><Th>TTL</Th><Th>Redis Key Pattern</Th></tr></thead>
         <tbody>
-          <tr><td>Package score</td><td>24h</td><td><code>pkg:score:npm:{"{name}"}</code></td></tr>
-          <tr><td>GitHub signals</td><td>6h</td><td><code>github:repo:{"{owner}"}:{"{repo}"}</code></td></tr>
-          <tr><td>npm metadata</td><td>12h</td><td><code>npm:meta:{"{name}"}</code></td></tr>
-          <tr><td>OSV data</td><td>24h</td><td><code>osv:npm:{"{name}"}</code></td></tr>
-          <tr><td>Full scan report</td><td>1h</td><td><code>scan:report:{"{lockfileHash}"}</code></td></tr>
+          {CACHE.map((c) => (
+            <tr key={c.data}><Td>{c.data}</Td><Td>{c.ttl}</Td><Td>{c.key}</Td></tr>
+          ))}
         </tbody>
-      </table>
+      </Table>
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-      <h2>Rate Limits</h2>
-      <ul>
-        <li><strong>GitHub API:</strong> 5,000 req/hr (authenticated) — queue pauses at &lt;100 remaining</li>
-        <li><strong>npm registry:</strong> no auth required, generous limits</li>
-        <li><strong>OSV.dev:</strong> free, no auth</li>
+      <H2>Rate Limits</H2>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+        {[
+          { source: 'GitHub API', note: '5,000 req/hr (authenticated) — queue pauses at < 100 remaining' },
+          { source: 'npm registry', note: 'No auth required, generous limits' },
+          { source: 'OSV.dev', note: 'Free, no auth required' },
+        ].map((r) => (
+          <li key={r.source} style={{ paddingLeft: '1.5rem', position: 'relative', fontSize: '0.9375rem', color: '#888888', lineHeight: 1.6 }}>
+            <span style={{ position: 'absolute', left: 0, color: '#FFFFFF', fontWeight: 700 }}>—</span>
+            <strong style={{ color: '#FFFFFF' }}>{r.source}:</strong> {r.note}
+          </li>
+        ))}
       </ul>
 
-      <h2>Deployment</h2>
-      <ul>
-        <li><strong>Web:</strong> Vercel (auto-deploys from <code>main</code>)</li>
-        <li><strong>Cron:</strong> Vercel Cron — <code>GET /api/cron/daily-tasks</code> at 08:00 UTC daily</li>
-        <li><strong>Environment:</strong> See <code>.env.example</code> for all required variables</li>
+      <H2>Deployment</H2>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+        {([
+          { label: 'Web', note: <>Vercel — auto-deploys from <Code>main</Code></> },
+          { label: 'Cron', note: <>Vercel Cron — <Code>GET /api/cron/daily-tasks</Code> at 08:00 UTC daily</> },
+          { label: 'Environment', note: <>See <Code>.env.example</Code> in the repo for all required variables</> },
+        ] as { label: string; note: React.ReactNode }[]).map((d) => (
+          <li key={d.label} style={{ paddingLeft: '1.5rem', position: 'relative', fontSize: '0.9375rem', color: '#888888', lineHeight: 1.6 }}>
+            <span style={{ position: 'absolute', left: 0, color: '#FFFFFF', fontWeight: 700 }}>—</span>
+            <strong style={{ color: '#FFFFFF' }}>{d.label}:</strong> {d.note}
+          </li>
+        ))}
       </ul>
-    </>
+    </div>
   );
 }

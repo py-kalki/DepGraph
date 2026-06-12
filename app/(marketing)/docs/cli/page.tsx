@@ -1,70 +1,74 @@
+import CodeBlock from '@/components/docs/CodeBlock';
+
 export const metadata = {
   title: 'CLI Guide — DepGraph Docs',
   description: 'How to use the DepGraph CLI to scan your projects.',
 };
 
-export default function CliDocs() {
+const H1 = ({ children }: { children: React.ReactNode }) => (
+  <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.05em', color: '#FFFFFF', marginBottom: '1.5rem', lineHeight: 1.05 }}>
+    {children}
+  </h1>
+);
+const H2 = ({ children }: { children: React.ReactNode }) => (
+  <h2 style={{ fontSize: '1.375rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#FFFFFF', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: '0.875rem', marginTop: '3.5rem', marginBottom: '1.5rem' }}>
+    {children}
+  </h2>
+);
+const H3 = ({ children }: { children: React.ReactNode }) => (
+  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.01em', marginTop: '2rem', marginBottom: '0.75rem', fontFamily: 'JetBrains Mono, monospace' }}>
+    {children}
+  </h3>
+);
+const P = ({ children }: { children: React.ReactNode }) => (
+  <p style={{ fontSize: '1rem', color: '#888888', lineHeight: 1.7, marginBottom: '1rem' }}>{children}</p>
+);
+const Code = ({ children }: { children: React.ReactNode }) => (
+  <code style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem', background: 'rgba(255,255,255,0.06)', padding: '0.15rem 0.4rem', color: '#FFFFFF' }}>{children}</code>
+);
+const Table = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>{children}</table>
+  </div>
+);
+const Th = ({ children }: { children: React.ReactNode }) => (
+  <th style={{ padding: '0.75rem 1rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#888888', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>{children}</th>
+);
+const Td = ({ children }: { children: React.ReactNode }) => (
+  <td style={{ padding: '0.75rem 1rem', color: '#888888', borderBottom: '1px solid rgba(255,255,255,0.07)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem' }}>{children}</td>
+);
+
+export default async function CliDocs() {
   return (
-    <>
-      <h1>CLI Guide</h1>
-      
-      <h2>Installation</h2>
-      <p>No installation required. You can run it instantly using <code>npx</code>:</p>
-      <pre><code>npx depgraph check</code></pre>
-      
-      <p>Or install it globally if you prefer:</p>
-      <pre><code>npm install -g depgraph
-depgraph check</code></pre>
-      
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-      
-      <h2>Commands</h2>
-      <h3><code>depgraph check</code></h3>
-      <p>Scan the current project's dependencies.</p>
-      <pre><code>npx depgraph check [options]</code></pre>
-      
-      <h4>Options</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Flag</th>
-            <th>Default</th>
-            <th>Description</th>
-          </tr>
-        </thead>
+    <div style={{ color: '#FFFFFF' }}>
+      <H1>CLI Guide</H1>
+      <P>Scan your project's dependency tree from the terminal in seconds. Zero configuration required.</P>
+
+      <H2>Installation</H2>
+      <P>Run instantly with <Code>npx</Code> — no install step needed:</P>
+      <CodeBlock lang="bash" code={`npx depgraph check`} />
+      <P>Or install globally for frequent use:</P>
+      <CodeBlock lang="bash" code={`npm install -g depgraph\ndepgraph check`} />
+
+      <H2>Commands</H2>
+      <H3>$ depgraph check</H3>
+      <P>Scan the current project's dependencies and return a scored report.</P>
+      <CodeBlock lang="bash" code={`npx depgraph check [options]`} />
+
+      <P>Options:</P>
+      <Table>
+        <thead><tr><Th>Flag</Th><Th>Default</Th><Th>Description</Th></tr></thead>
         <tbody>
-          <tr>
-            <td><code>--path &lt;dir&gt;</code></td>
-            <td><code>.</code></td>
-            <td>Directory containing <code>package.json</code></td>
-          </tr>
-          <tr>
-            <td><code>--format &lt;fmt&gt;</code></td>
-            <td><code>table</code></td>
-            <td>Output format: <code>table | json</code></td>
-          </tr>
-          <tr>
-            <td><code>--threshold &lt;n&gt;</code></td>
-            <td>none</td>
-            <td>Exit 1 if project score &lt; n</td>
-          </tr>
-          <tr>
-            <td><code>--depth &lt;n&gt;</code></td>
-            <td>2</td>
-            <td>Transitive dependency depth</td>
-          </tr>
-          <tr>
-            <td><code>--no-color</code></td>
-            <td>—</td>
-            <td>Disable color output</td>
-          </tr>
+          <tr><Td>--path &lt;dir&gt;</Td><Td>.</Td><Td>Directory containing package.json</Td></tr>
+          <tr><Td>--format &lt;fmt&gt;</Td><Td>table</Td><Td>Output format: table | json</Td></tr>
+          <tr><Td>--threshold &lt;n&gt;</Td><Td>none</Td><Td>Exit 1 if project score &lt; n</Td></tr>
+          <tr><Td>--depth &lt;n&gt;</Td><Td>2</Td><Td>Transitive dependency depth</Td></tr>
+          <tr><Td>--no-color</Td><Td>—</Td><Td>Disable color output</Td></tr>
         </tbody>
-      </table>
+      </Table>
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-      <h2>Output Format</h2>
-      <pre><code>DepGraph v1.0 — Scanning 247 dependencies...
+      <H2>Output Format</H2>
+      <CodeBlock lang="bash" code={`DepGraph v1.0 — Scanning 247 dependencies...
 
   Project Health Score: 71 / 100  ████████░░
 
@@ -75,43 +79,25 @@ depgraph check</code></pre>
 
   HIGH (7)  MEDIUM (18)  LOW (41)  HEALTHY (179)
 
-  Full report: https://depgraph.vedanshh.dev/r/a3f9x2k1</code></pre>
+  Full report: https://depgraph.vedanshh.dev/r/a3f9x2k1`} />
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-      <h2>Exit Codes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Meaning</th>
-          </tr>
-        </thead>
+      <H2>Exit Codes</H2>
+      <Table>
+        <thead><tr><Th>Code</Th><Th>Meaning</Th></tr></thead>
         <tbody>
-          <tr>
-            <td><code>0</code></td>
-            <td>All checks passed</td>
-          </tr>
-          <tr>
-            <td><code>1</code></td>
-            <td>Score below <code>--threshold</code></td>
-          </tr>
-          <tr>
-            <td><code>2</code></td>
-            <td>Error (network failure, invalid project)</td>
-          </tr>
+          <tr><Td>0</Td><Td>All checks passed</Td></tr>
+          <tr><Td>1</Td><Td>Score below --threshold</Td></tr>
+          <tr><Td>2</Td><Td>Error (network failure, invalid project)</Td></tr>
         </tbody>
-      </table>
+      </Table>
 
-      <hr style={{ margin: '3rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+      <H2>Authentication</H2>
+      <P>Link CLI scans to your Pro dashboard with GitHub OAuth:</P>
+      <CodeBlock lang="bash" code={`npx depgraph auth`} />
+      <P>This opens a browser window for GitHub login and writes your API key to <Code>~/.depgraph/config.json</Code>.</P>
 
-      <h2>Authentication</h2>
-      <p>If you have a Pro account and want to link your scans to your dashboard:</p>
-      <pre><code>npx depgraph auth</code></pre>
-      <p>This opens a browser for GitHub OAuth login and writes your API key to <code>~/.depgraph/config.json</code>.</p>
-
-      <h2>JSON Output (for CI)</h2>
-      <pre><code>npx depgraph check --format json | jq '.overallScore'</code></pre>
-    </>
+      <H2>JSON Output (for CI)</H2>
+      <CodeBlock lang="bash" code={`npx depgraph check --format json | jq '.overallScore'`} />
+    </div>
   );
 }
