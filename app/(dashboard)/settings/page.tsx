@@ -163,7 +163,7 @@ export default function SettingsPage() {
             <h2 style={{ fontSize: '1.125rem', fontWeight: 600 }}>CI/CD Tokens</h2>
           </div>
           <p style={{ color: '#888888', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem', marginBottom: '1.5rem' }}>
-            Use these API keys to authenticate the DepGraph CLI in your CI/CD pipelines.
+            Use these API keys to authenticate the <strong style={{ color: '#FFFFFF' }}>DepGraph CLI</strong> (<code>npx depgraph-scanner auth --token YOUR_KEY</code>) and CI/CD pipelines.
           </p>
 
           {generatedKey && (
