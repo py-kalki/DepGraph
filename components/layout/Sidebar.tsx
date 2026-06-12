@@ -6,7 +6,7 @@
 
 import Link from 'next/link';
 import { ProjectSwitcher } from '@/components/project/ProjectSwitcher';
-import { LayoutGrid, Settings, HelpCircle } from 'lucide-react';
+import { LayoutGrid, Settings, HelpCircle, CreditCard } from 'lucide-react';
 
 export function Sidebar() {
   return (
@@ -26,6 +26,9 @@ export function Sidebar() {
         </Link>
         <Link href="/settings" className="sidebar-link" id="nav-settings">
           <Settings size={16} /> Settings
+        </Link>
+        <Link href="/settings/billing" className="sidebar-link" id="nav-billing">
+          <CreditCard size={16} /> Billing
         </Link>
         <Link href="/support" className="sidebar-link" id="nav-support">
           <HelpCircle size={16} /> Support

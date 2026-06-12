@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { KeyRound, Download, Trash2, Mail, BellRing, Copy, Check } from 'lucide-react';
+import { KeyRound, Download, Trash2, Mail, BellRing, Copy, Check, CreditCard } from 'lucide-react';
 import HoverCardEffect from '@/components/landing/HoverCardEffect';
 
 interface ApiKey {
@@ -86,6 +86,40 @@ export default function SettingsPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         
+        {/* Billing & Subscription */}
+        <section className="card hover-card" style={{ padding: '2rem', border: '1px solid #1D9E75' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <CreditCard size={20} color="#1D9E75" />
+              <h2 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#1D9E75' }}>Billing &amp; Subscription</h2>
+            </div>
+            <a 
+              href="/settings/billing"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.5rem 1rem',
+                background: '#1D9E75',
+                color: '#000000',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.8125rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                letterSpacing: '0.05em',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
+              onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+            >
+              Manage Plan
+            </a>
+          </div>
+          <p style={{ color: '#888888', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8125rem' }}>
+            View your current plan, upgrade to Pro, or download past invoices.
+          </p>
+        </section>
+
         {/* Alert Thresholds */}
         <section className="card hover-card" style={{ padding: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
